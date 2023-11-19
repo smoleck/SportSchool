@@ -9,6 +9,7 @@ import pl.coderslab.sportschool.repository.InstructorAvailabilityRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InstructorAvailabilityService {
@@ -30,6 +31,10 @@ public class InstructorAvailabilityService {
         availabilityRepository.save(availability);
     }
 
+    public InstructorAvailability getAvailabilityById(Long availabilityId) {
+        Optional<InstructorAvailability> optionalAvailability = availabilityRepository.findById(availabilityId);
+        return optionalAvailability.orElse(null);
+    }
     public List<InstructorAvailability> getAvailabilityForInstructor(Long instructorId) {
         return availabilityRepository.findByInstructor_Id(instructorId);
     }

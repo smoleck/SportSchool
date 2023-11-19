@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import pl.coderslab.sportschool.model.Student;
 import pl.coderslab.sportschool.repository.StudentRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class StudentService {
 
@@ -19,5 +22,8 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-
+    public Student getStudentById(Long studentId) {
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+        return optionalStudent.orElse(null);
+    }
 }
