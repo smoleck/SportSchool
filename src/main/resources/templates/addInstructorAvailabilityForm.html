@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Dodaj odpowiednie nagłówki -->
+</head>
+<body>
+<h2>Dodaj dostępność instruktora</h2>
+
+<form th:action="@{/admin/instructorAvailability/add}" th:object="${availability}" method="post">
+  <label for="instructor">Wybierz instruktora:</label>
+  <select th:field="*{instructor}" id="instructor">
+    <option th:each="instructor : ${instructors}" th:value="${instructor.id}" th:text="${instructor.name + ' ' + instructor.surname}"></option>
+  </select>
+  <br>
+
+  <label for="availabilityDate">Data dostępności:</label>
+  <input type="date" th:field="*{availabilityDate}" id="availabilityDate">
+  <br>
+
+  <label for="startTime">Czas rozpoczęcia:</label>
+  <input type="time" th:field="*{startTime}" id="startTime">
+  <br>
+
+  <label for="endTime">Czas zakończenia:</label>
+  <input type="time" th:field="*{endTime}" id="endTime">
+  <br>
+
+  <button type="submit">Dodaj dostępność</button>
+</form>
+</body>
+</html>

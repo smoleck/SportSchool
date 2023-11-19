@@ -1,0 +1,42 @@
+<!-- addInstructorAvailabilityForm.html -->
+
+<form th:action="@{/admin/instructorAvailability/add}" method="post" th:object="${instructorAvailability}">
+  <!-- Wybór instruktora z tabeli instructors -->
+  <label for="instructor">Wybierz instruktora:</label>
+  <select id="instructor" name="instructor.id" th:field="*{instructor.id}">
+    <option th:each="instructor : ${allInstructors}" th:value="${instructor.id}" th:text="${instructor.name + ' ' + instructor.surname}"></option>
+  </select>
+
+  <!-- Przyciski do przesuwania tygodnia -->
+  <button type="button" onclick="previousWeek()">Poprzedni tydzień</button>
+  <button type="button" onclick="nextWeek()">Następny tydzień</button>
+
+  <!-- Tabela z godzinami -->
+  <table id="availabilityTable">
+    <!-- Nagłówki dni tygodnia -->
+    <thead>
+    <tr>
+      <th></th> <!-- Pusty kafelek dla instruktora -->
+      <th>Pon</th>
+      <th>Wt</th>
+      <th>Śr</th>
+      <th>Czw</th>
+      <th>Pt</th>
+      <th>Sob</th>
+      <th>Niedz</th>
+    </tr>
+    </thead>
+    <!-- Ciało tabeli -->
+    <tbody>
+    <!-- Wiersze z godzinami w odstępie 30 minut -->
+    <tr th:each="hour : ${hours}">
+      <td th:text="${hour}"></td> <!-- Godzina w lewej kolumnie -->
+      <td th:each="day : ${daysOfWeek}" class="availability-cell"></td> <!-- Kafelki dla dni tygodnia z klasą availability-cell -->
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Pozostałe pola formularza -->
+
+  <input type="submit" value="Dodaj dostępność" />
+</form>
