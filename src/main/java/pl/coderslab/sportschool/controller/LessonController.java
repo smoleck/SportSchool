@@ -2,15 +2,15 @@ package pl.coderslab.sportschool.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.sportschool.model.Instructor;
+import pl.coderslab.sportschool.model.InstructorAvailability;
 import pl.coderslab.sportschool.model.Lesson;
 import pl.coderslab.sportschool.service.InstructorService;
 import pl.coderslab.sportschool.service.LessonService;
+import pl.coderslab.sportschool.service.InstructorAvailabilityService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -19,11 +19,13 @@ public class LessonController {
 
     private final InstructorService instructorService;
     private final LessonService lessonService;
+    private  final InstructorAvailabilityService instructorAvailabilityService;
 
     @Autowired
-    public LessonController(InstructorService instructorService, LessonService lessonService) {
+    public LessonController(InstructorService instructorService, LessonService lessonService, InstructorAvailabilityService instructorAvailabilityService) {
         this.instructorService = instructorService;
         this.lessonService = lessonService;
+        this.instructorAvailabilityService = instructorAvailabilityService;
     }
 
     @GetMapping("/add")
@@ -35,27 +37,27 @@ public class LessonController {
         return "addLessonForm";
     }
 
-    @PostMapping("/add")
-    public String addLesson(@ModelAttribute("lesson") Lesson lesson) {
-        Instructor selectedInstructor = instructorService.getInstructorById(lesson.getInstructor().getId());
-        lesson.setInstructor(selectedInstructor);
+    @GetMapping("/select-availability")
+    public String showAvailabilityForm(Model model) {
+        // Pobierz listę dostępnych instruktorów
+        List<Instructor> instructors = instructorService.getAllInstructors();
+        model.addAttribute("instructors", instructors);
 
-        // Ustaw odpowiednie wartości dla nowych pól
-        lesson.setIsGroup(lesson.isGroup());
-        lesson.setLessonDate(lesson.getLessonDate());
-        lesson.setStartTime(lesson.getStartTime());
-        lesson.setEndTime(lesson.getEndTime());
-
-        lessonService.addLesson(lesson);
-
-        return "redirect:/user/home";
+        return "availability-form";
     }
 
-//    @GetMapping("/list")
-//    public String showAllLessons(Model model) {
-//        List<Lesson> lessons = lessonService.getAllLessons();
-//        model.addAttribute("lessons", lessons);
-//
-//        return "lessonList";
-//    }
+    @PostMapping("/select-availability")
+    public String showInstructorAvailability(@RequestParam Long instructorId,
+                                             @RequestParam String availabilityDate,
+                                             Model model) {
+        // Pobierz dostępności instruktora dla wybranej daty
+        LocalDate date = LocalDate.parse(availabilityDate);
+        List<InstructorAvailability> availabilities = instructorAvailabilityService.getInstructorAvailability(instructorId, date);
+
+        model.addAttribute("availabilities", availabilities);
+
+        return "availability-table";
+    }
+
+
 }

@@ -14,7 +14,12 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "username")
     private String username;
 
@@ -24,12 +29,31 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
     public User() {}
 
-    public User(String username, String password, String role) {
+
+    public User(Long id, String username, String password, String role, List<Student> students) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.students = students;
     }
 
     // Getters and setters

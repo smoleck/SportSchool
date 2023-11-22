@@ -1,33 +1,30 @@
 package pl.coderslab.sportschool.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import pl.coderslab.sportschool.model.Instructor;
 import pl.coderslab.sportschool.model.Lesson;
-import pl.coderslab.sportschool.repository.LessonRepository;
+import pl.coderslab.sportschool.model.Student;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
-public class LessonService {
+public interface LessonService {
 
-    private final LessonRepository lessonRepository;
+    List<Lesson> getAllLessons();
 
-    @Autowired
-    public LessonService(LessonRepository lessonRepository) {
-        this.lessonRepository = lessonRepository;
-    }
+    Lesson getLessonById(Long id);
 
-    public void addLesson(Lesson lesson) {
-        lessonRepository.save(lesson);
-    }
+    List<Lesson> getLessonsByInstructor(Instructor instructor);
 
-    public List<Lesson> getAllLessons() {
-        return lessonRepository.findAll();
-    }
+    List<Lesson> getLessonsByStudent(Student student);
 
-    public Lesson getLessonById(Long lessonId) {
-        return lessonRepository.findById(lessonId).orElse(null);
-    }
+    List<Lesson> getLessonsByDateTime(LocalDateTime dateTime);
 
-    // Dodaj inne metody serwisu, jeśli są potrzebne
+    void addLesson(Instructor instructor, List<Student> students, LocalDate LessonDate) ;
+
+    void updateLesson(Lesson lesson);
+
+    void deleteLesson(Long id);
+
+
 }

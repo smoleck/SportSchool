@@ -5,6 +5,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "students")
@@ -20,18 +22,31 @@ public class Student {
     private String surname;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    @ManyToMany(mappedBy = "students")
+    private Set<Lesson> lessons = new HashSet<>();
     public Student() {
     }
 
-    public Student(String name, String surname, User user) {
+    public Set<Lesson> getLessons() {
+        return lessons;
+    }
 
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    public Student(Long id, String name, String surname, User user, Set<Lesson> lessons) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.user = user;
+        this.lessons = lessons;
     }
+
+
 
     public Long getId() {
         return id;

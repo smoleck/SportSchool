@@ -1,34 +1,42 @@
+// src/main/java/pl/coderslab/sportschool/model/Lesson.java
 package pl.coderslab.sportschool.model;
 
-import javax.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "lessons")
+@Table(name = "lesson")
 public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "name")
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 
-    @Column(name = "lesson_date", nullable = false)
+    @Column(name = "lesson_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate lessonDate;
 
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time")
     private LocalTime startTime;
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time")
     private LocalTime endTime;
 
-    @Column(name = "is_group", nullable = false)
+    @Column(name = "is_group")
     private boolean isGroup;
 
     @ManyToMany
@@ -37,7 +45,7 @@ public class Lesson {
             joinColumns = @JoinColumn(name = "lesson_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private List<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     // Getters and setters
 
@@ -47,6 +55,16 @@ public class Lesson {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Instructor getInstructor() {
@@ -81,16 +99,25 @@ public class Lesson {
         this.endTime = endTime;
     }
 
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = (Set<Student>) students;
+    }
+
     public boolean isGroup() {
         return isGroup;
     }
 
-    public void setIsGroup(boolean isGroup) {
-        this.isGroup = isGroup;
+    public void setIsGroup(boolean group) {
+        isGroup = group;
     }
 
-    public Lesson() {
+    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, Set<Student> students) {
         this.id = id;
+        this.name = name;
         this.instructor = instructor;
         this.lessonDate = lessonDate;
         this.startTime = startTime;
@@ -99,17 +126,6 @@ public class Lesson {
         this.students = students;
     }
 
-    public List<Student> getStudents() {
-        return students;
+    public Lesson() {
     }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-
-
-    // Constructors
-
-    // Other fields and methods as needed
 }

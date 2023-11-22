@@ -38,6 +38,9 @@ public class InstructorAvailabilityService {
     public List<InstructorAvailability> getAvailabilityForInstructor(Long instructorId) {
         return availabilityRepository.findByInstructor_Id(instructorId);
     }
+    public List<InstructorAvailability> getInstructorAvailability(Long instructorId, LocalDate date) {
+        return availabilityRepository.findByInstructorIdAndAvailabilityDate(instructorId, date);
+    }
 
     // Dodaj inne metody serwisu, jeśli są potrzebne
 }
