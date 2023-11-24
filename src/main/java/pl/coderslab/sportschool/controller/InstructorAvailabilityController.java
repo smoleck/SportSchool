@@ -52,7 +52,7 @@ public class InstructorAvailabilityController {
 
         // Iteracja z krokiem 30 minut
         while (startTime.isBefore(endTime)) {
-            LocalTime nextTime = startTime.plusMinutes(15);
+            LocalTime nextTime = startTime.plusMinutes(60);
 
             // Dodaj dostępność do serwisu
             availabilityService.addInstructorAvailability(

@@ -1,52 +1,128 @@
+<!-- addLesson.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Lesson</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
 <h2>Add Lesson</h2>
 
-<!-- Jeśli istnieje parametr "success" w adresie, wyświetl komunikat o sukcesie -->
-<div th:if="${param.success}">
-    <p style="color: green;">Lesson added successfully!</p>
-</div>
+<form action="/user/lesson/save" method="post">
+    <!-- Wybór instruktora -->
+    <div>
+        <label for="instructorId">Select Instructor:</label>
+        <select name="instructorId" id="instructorId" required>
+            <option th:each="instructor : ${instructors}"
+                    th:value="${instructor.id}"
+                    th:text="${instructor.name}"></option>
+        </select>
+    </div>
 
-<!-- Formularz dodawania lekcji -->
-<form th:action="@{/user/lesson/add}" th:object="${lesson}" method="post">
-    <!-- Instruktorzy (wybór) -->
-    <label for="instructor">Select Instructor:</label>
-    <select id="instructor" th:field="*{instructor.id}">
-        <option th:each="instructor : ${instructors}" th:value="${instructor.id}" th:text="${instructor.name}"></option>
-    </select>
-    <br>
+    <!-- Wybór daty -->
+    <div>
+        <label for="lessonDate">Select Lesson Date:</label>
+        <input type="date" name="lessonDate" id="lessonDate" required>
+    </div>
 
-    <!-- Rodzaj lekcji (grupowa/indywidualna) -->
-    <label for="isGroup">Group Lesson:</label>
-    <input type="checkbox" id="isGroup" th:field="*{group}" />
-    <br>
+    <!-- Wybór dostępności instruktora w danym dniu -->
+    <div>
+        <label for="lessonTime">Select Lesson Time:</label>
+        <select name="lessonTime" id="lessonTime" required>
+            <!-- Lista będzie generowana dynamicznie w oparciu o dostępność instruktora w danym dniu -->
+        </select>
+    </div>
 
-    <!-- Data lekcji -->
-    <label for="lessonDate">Lesson Date:</label>
-    <input type="date" id="lessonDate" th:field="*{lessonDate}" />
-    <br>
-
-    <!-- Czas rozpoczęcia -->
-    <label for="startTime">Start Time:</label>
-    <input type="time" id="startTime" th:field="*{startTime}" />
-    <br>
-
-    <!-- Czas zakończenia -->
-    <label for="endTime">End Time:</label>
-    <input type="time" id="endTime" th:field="*{endTime}" />
-    <br>
-
-    <!-- Przycisk do dodawania lekcji -->
     <button type="submit">Add Lesson</button>
 </form>
 
-<!-- Przycisk do powrotu do listy lekcji -->
-<a th:href="@{/user/home}">Back to Lesson List</a>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        // Obsługa zmiany daty
+        $('#lessonDate').on('change', function() {
+            updateAvailability();
+        });
+
+        // Obsługa zmiany instruktora
+        $('#instructorId').on('change', function() {
+            updateAvailability();
+        });
+
+        function updateAvailability() {
+            var selectedDate = $('#lessonDate').val();
+            var selectedInstructor = $('#instructorId').val();
+
+            // Pobierz dostępność instruktora w danym dniu z kontrolera
+            $.get('/user/lesson/availability', { date: selectedDate, instructorId: selectedInstructor }, function(data) {
+                // Wypełnij rozwijaną listę z dostępnymi godzinami
+                var timeDropdown = $('#lessonTime');
+                timeDropdown.empty();
+                $.each(data, function(index, value) {
+                    timeDropdown.append('<option value="' + value + '">' + value + '</option>');
+                });
+            });
+        }
+    });
+</script>
 </body>
 </html>
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Add Lesson</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h2>Add Lesson</h2>-->
+
+<!--&lt;!&ndash; Jeśli istnieje parametr "success" w adresie, wyświetl komunikat o sukcesie &ndash;&gt;-->
+<!--<div th:if="${param.success}">-->
+<!--    <p style="color: green;">Lesson added successfully!</p>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Formularz dodawania lekcji &ndash;&gt;-->
+<!--<form th:action="@{/user/lesson/add}" th:object="${lesson}" method="post">-->
+<!--    &lt;!&ndash; Instruktorzy (wybór) &ndash;&gt;-->
+<!--    <label for="instructor">Select Instructor:</label>-->
+<!--    <select id="instructor" th:field="*{instructor.id}">-->
+<!--        <option th:each="instructor : ${instructors}" th:value="${instructor.id}" th:text="${instructor.name}"></option>-->
+<!--    </select>-->
+<!--    <br>-->
+
+<!--    &lt;!&ndash; Rodzaj lekcji (grupowa/indywidualna) &ndash;&gt;-->
+<!--    <label for="isGroup">Group Lesson:</label>-->
+<!--    <input type="checkbox" id="isGroup" th:field="*{group}" />-->
+<!--    <br>-->
+
+<!--    &lt;!&ndash; Data lekcji &ndash;&gt;-->
+<!--    <label for="lessonDate">Lesson Date:</label>-->
+<!--    <input type="date" id="lessonDate" th:field="*{lessonDate}" />-->
+<!--    <br>-->
+
+<!--    &lt;!&ndash; Czas rozpoczęcia &ndash;&gt;-->
+<!--    <label for="startTime">Start Time:</label>-->
+<!--    <input type="time" id="startTime" th:field="*{startTime}" />-->
+<!--    <br>-->
+
+<!--    &lt;!&ndash; Czas zakończenia &ndash;&gt;-->
+<!--    <label for="endTime">End Time:</label>-->
+<!--    <input type="time" id="endTime" th:field="*{endTime}" />-->
+<!--    <br>-->
+
+<!--    &lt;!&ndash; Przycisk do dodawania lekcji &ndash;&gt;-->
+<!--    <button type="submit">Add Lesson</button>-->
+<!--</form>-->
+
+<!--&lt;!&ndash; Przycisk do powrotu do listy lekcji &ndash;&gt;-->
+<!--<a th:href="@{/user/home}">Back to Lesson List</a>-->
+<!--</body>-->
+<!--</html>-->
+
+

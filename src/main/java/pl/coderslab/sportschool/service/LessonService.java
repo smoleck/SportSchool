@@ -6,6 +6,7 @@ import pl.coderslab.sportschool.model.Student;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface LessonService {
@@ -18,9 +19,9 @@ public interface LessonService {
 
     List<Lesson> getLessonsByStudent(Student student);
 
-    List<Lesson> getLessonsByDateTime(LocalDateTime dateTime);
+    List<Lesson> getLessonsByDateTime(LocalDate lessonDate);
 
-    void addLesson(Instructor instructor, List<Student> students, LocalDate LessonDate) ;
+    void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime) ;
 
     void updateLesson(Lesson lesson);
 

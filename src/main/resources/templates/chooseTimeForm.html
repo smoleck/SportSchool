@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Lesson</title>
+</head>
+<body>
+
+<h2>Add Lesson</h2>
+<form th:action="@{/user/lesson/addLesson}" method="post">
+    <!-- Ukryte pola do przekazania danych do kontrolera -->
+    <input type="hidden" id="instructorId" name="instructorId" th:value="${instructorId}" />
+    <input type="hidden" id="lessonDate" name="lessonDate" th:value="${lessonDate}" />
+
+    <!-- ... inne pola formularza ... -->
+
+    <label for="selectedAvailabilityStartTime">Select Availability Start Time:</label>
+    <select id="selectedAvailabilityStartTime" name="startTime">
+        <!-- Iteracja przez dostępność instruktora -->
+        <option th:each="availability : ${availabilityList}" th:value="${availability.startTime}" th:text="${availability.startTime}"></option>
+    </select>
+
+    <!-- ... inne pola formularza, jeśli istnieją ... -->
+
+    <button type="submit">Add Lesson</button>
+</form>
+
+<!--<script th:inline="javascript">-->
+<!--    $(document).ready(function () {-->
+<!--        $('#instructor').change(function () {-->
+<!--            var instructorId = $(this).val();-->
+<!--            var lessonDate = $('#lessonDate').val();-->
+
+<!--            $.get('/user/lesson/available-hours', {instructorId: instructorId, lessonDate: lessonDate}, function (data) {-->
+<!--                // Aktualizuj listę godzin na podstawie danych otrzymanych w odpowiedzi-->
+<!--                var hoursSelect = $('#hours');-->
+<!--                hoursSelect.empty();-->
+<!--                $.each(data, function (index, value) {-->
+<!--                    hoursSelect.append($('<option>').text(value).attr('value', value));-->
+<!--                });-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+</script>
+</body>
+</html>

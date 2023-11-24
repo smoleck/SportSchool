@@ -6,6 +6,7 @@ import pl.coderslab.sportschool.model.Instructor;
 import pl.coderslab.sportschool.model.Lesson;
 import pl.coderslab.sportschool.model.Student;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,5 +16,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     List<Lesson> findByStudentsContaining(Student student);
 
-    List<Lesson> findByDateTime(LocalDateTime dateTime);// Możesz dodać niestandardowe zapytania lub korzystać z gotowych metod dostarczanych przez JpaRepository
+    List<Lesson> findByLessonDate(LocalDate lessonDate);// Możesz dodać niestandardowe zapytania lub korzystać z gotowych metod dostarczanych przez JpaRepository
 }

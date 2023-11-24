@@ -5,59 +5,65 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.sportschool.model.Instructor;
 import pl.coderslab.sportschool.model.InstructorAvailability;
-import pl.coderslab.sportschool.model.Lesson;
 import pl.coderslab.sportschool.service.InstructorService;
 import pl.coderslab.sportschool.service.LessonService;
 import pl.coderslab.sportschool.service.InstructorAvailabilityService;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
 @RequestMapping("/user/lesson")
 public class LessonController {
 
-    private final InstructorService instructorService;
-    private final LessonService lessonService;
-    private  final InstructorAvailabilityService instructorAvailabilityService;
-
     @Autowired
-    public LessonController(InstructorService instructorService, LessonService lessonService, InstructorAvailabilityService instructorAvailabilityService) {
-        this.instructorService = instructorService;
-        this.lessonService = lessonService;
-        this.instructorAvailabilityService = instructorAvailabilityService;
-    }
+    private InstructorService instructorService;
+    @Autowired
+    private LessonService lessonService;
+    @Autowired
+    private InstructorAvailabilityService instructorAvailabilityService;
+
+//    @Autowired
+//    public LessonController(InstructorService instructorService, LessonService lessonService, InstructorAvailabilityService instructorAvailabilityService) {
+//        this.instructorService = instructorService;
+//        this.lessonService = lessonService;
+//        this.instructorAvailabilityService = instructorAvailabilityService;
+//    }
 
     @GetMapping("/add")
-    public String showAddLessonForm(Model model) {
+    public String showLessonForm(Model model) {
+        // Pobierz listę wszystkich instruktorów
         List<Instructor> instructors = instructorService.getAllInstructors();
-        model.addAttribute("instructors", instructors);
-        model.addAttribute("lesson", new Lesson());
 
+        // Przekaż instruktorów do widoku
+        model.addAttribute("instructors", instructors);
+
+        // Zwróć nazwę widoku, gdzie użytkownik wybierze instruktora, datę i godzinę
         return "addLessonForm";
     }
 
-    @GetMapping("/select-availability")
-    public String showAvailabilityForm(Model model) {
-        // Pobierz listę dostępnych instruktorów
-        List<Instructor> instructors = instructorService.getAllInstructors();
-        model.addAttribute("instructors", instructors);
+    @GetMapping("/availability")
+    @ResponseBody
+    public List<LocalTime> getInstructorAvailability(@RequestParam String date, @RequestParam Long instructorId) {
+        // Pobierz dostępność instruktora w danym dniu z serwisu
+        LocalDate lessonDate = LocalDate.parse(date); // Konwersja stringa na LocalDate
+        List<LocalTime> availableHours = instructorAvailabilityService.getInstructorAvailability(instructorId, lessonDate);
 
-        return "availability-form";
+        return availableHours;
     }
+    // Dodaj metody do obsługi dodawania lekcji do bazy danych
+    @PostMapping("/save")
+    public String saveLesson(@RequestParam Long instructorId, @RequestParam String lessonDate, @RequestParam String lessonTime) {
+        // Pobierz instruktora na podstawie ID
+        Instructor instructor = instructorService.getInstructorById(instructorId);
 
-    @PostMapping("/select-availability")
-    public String showInstructorAvailability(@RequestParam Long instructorId,
-                                             @RequestParam String availabilityDate,
-                                             Model model) {
-        // Pobierz dostępności instruktora dla wybranej daty
-        LocalDate date = LocalDate.parse(availabilityDate);
-        List<InstructorAvailability> availabilities = instructorAvailabilityService.getInstructorAvailability(instructorId, date);
+        // Przetworzenie i zapisanie lekcji w bazie danych
+        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
 
-        model.addAttribute("availabilities", availabilities);
-
-        return "availability-table";
+        instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
+        // Przekieruj użytkownika na stronę po zapisaniu lekcji
+        return "redirect:/user/home";
     }
-
-
 }
+//

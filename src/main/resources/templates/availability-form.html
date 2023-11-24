@@ -1,0 +1,39 @@
+<!-- availability-form.html -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructor Availability</title>
+</head>
+<body>
+
+<h2>Instructor Availability</h2>
+
+<!-- Wyświetlanie tabeli dostępności -->
+<table>
+    <thead>
+    <tr>
+        <th>Start Time</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iterowanie przez dostępność instruktora -->
+    <tr th:each="availability : ${availabilityList}">
+        <td th:text="${availability.startTime}"></td>
+        <td>
+            <!-- Przycisk "Choose" do wybierania dostępności -->
+            <form th:action="@{/lessons/add}" method="post">
+                <input type="hidden" name="instructorId" th:value="${availability.instructor.id}" />
+                <input type="hidden" name="selectedDate" th:value="${availability.date}" />
+                <input type="hidden" name="startTime" th:value="${availability.startTime}" />
+                <button type="submit">Choose</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
