@@ -12,6 +12,8 @@
 
 <form action="/user/lesson/save" method="post">
     <!-- Wybór instruktora -->
+    <input type="hidden" name="isGroup" value="0">
+
     <div>
         <label for="instructorId">Select Instructor:</label>
         <select name="instructorId" id="instructorId" required>
@@ -39,24 +41,41 @@
         <input type="checkbox" th:id="${'student_' + student.id}" th:name="studentIds" th:value="${student.id}" onclick="limitCheckboxSelection(this, 3)" />
         <label th:for="${'student_' + student.id}" th:text="${student.name + ' ' + student.surname}"></label><br />
     </div>
+
+    <!-- Dodaj miejsce na wyświetlenie liczby zaznaczonych checkboxów -->
+    <p id="selectedCount">Liczba zaznaczonych: 0</p>
     <button type="submit">Add Lesson</button>
+
+    <p id="selectedPrice">Cena: 0 zł</p>
 </form>
 
 <script th:inline="javascript">
-    function limitCheckboxSelection(checkbox, maxCount) {
-        var checkboxes = document.getElementsByName("studentIds");
-        var checkedCount = 0;
+    function limitCheckboxSelection(checkbox, maxLimit) {
+        var selectedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        document.getElementById('selectedCount').textContent = 'Liczba zaznaczonych: ' + selectedCount;
 
-        for (var i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                checkedCount++;
-            }
+        // Oblicz cenę w zależności od liczby zaznaczonych checkboxów
+        var price;
+        if (selectedCount === 1) {
+            price = 100;
+        } else if (selectedCount === 2) {
+            price = 180;
+        } else if (selectedCount >= 3) {
+            price = 250;
+        } else {
+            price = 0;  // Cena dla braku zaznaczonych checkboxów
         }
 
-        if (checkedCount > maxCount) {
+        // Aktualizuj wyświetlaną cenę
+        document.getElementById('selectedPrice').textContent = 'Cena: ' + price + ' zł';
+
+        // Dodaj tutaj kod, jeśli chcesz coś zrobić, gdy osiągnięto limit
+        if (selectedCount > maxLimit) {
             checkbox.checked = false;
+            alert('Osiągnięto limit zaznaczonych checkboxów (' + maxLimit + ').');
         }
     }
+
 
     $(document).ready(function() {
         // Obsługa zmiany daty

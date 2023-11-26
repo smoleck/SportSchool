@@ -4,6 +4,7 @@ package pl.coderslab.sportschool.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -38,7 +39,8 @@ public class Lesson {
 
     @Column(name = "is_group")
     private boolean isGroup;
-
+    @Column(name = "price")
+    private BigDecimal price;
     @ManyToMany
     @JoinTable(
             name = "lesson_students",
@@ -46,6 +48,34 @@ public class Lesson {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private Set<Student> students = new HashSet<>();
+
+    public void setGroup(boolean group) {
+        isGroup = group;
+    }
+
+    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, BigDecimal price, Set<Student> students) {
+        this.id = id;
+        this.name = name;
+        this.instructor = instructor;
+        this.lessonDate = lessonDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.isGroup = isGroup;
+        this.price = price;
+        this.students = students;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
 
     // Getters and setters
 

@@ -30,12 +30,6 @@ public class LessonController {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    public LessonController(InstructorService instructorService, LessonService lessonService, InstructorAvailabilityService instructorAvailabilityService) {
-//        this.instructorService = instructorService;
-//        this.lessonService = lessonService;
-//        this.instructorAvailabilityService = instructorAvailabilityService;
-//    }
 
     @GetMapping("/add")
     public String showLessonForm(Model model) {
@@ -68,6 +62,7 @@ public class LessonController {
     public String saveLesson(@RequestParam Long instructorId,
                              @RequestParam String lessonDate,
                              @RequestParam String lessonTime,
+                             @RequestParam boolean isGroup,
                              @RequestParam List<Long> studentIds) {
         Instructor instructor = instructorService.getInstructorById(instructorId);
 
@@ -75,7 +70,7 @@ public class LessonController {
         List<Student> students = userService.getStudentsByIds(studentIds);
 
         // Dodaj lekcję z uwzględnieniem kursantów
-        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), students);
+        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), students, isGroup);
 
         // Usuń dostępność instruktora (jeśli to konieczne)
         instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
