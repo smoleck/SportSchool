@@ -103,9 +103,7 @@ public class Lesson {
         return students;
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = (Set<Student>) students;
-    }
+
 
     public boolean isGroup() {
         return isGroup;

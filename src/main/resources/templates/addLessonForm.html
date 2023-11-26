@@ -35,10 +35,29 @@
         </select>
     </div>
 
+    <div th:each="student, iterStat : ${students}">
+        <input type="checkbox" th:id="${'student_' + student.id}" th:name="studentIds" th:value="${student.id}" onclick="limitCheckboxSelection(this, 3)" />
+        <label th:for="${'student_' + student.id}" th:text="${student.name + ' ' + student.surname}"></label><br />
+    </div>
     <button type="submit">Add Lesson</button>
 </form>
 
 <script th:inline="javascript">
+    function limitCheckboxSelection(checkbox, maxCount) {
+        var checkboxes = document.getElementsByName("studentIds");
+        var checkedCount = 0;
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                checkedCount++;
+            }
+        }
+
+        if (checkedCount > maxCount) {
+            checkbox.checked = false;
+        }
+    }
+
     $(document).ready(function() {
         // Obsługa zmiany daty
         $('#lessonDate').on('change', function() {

@@ -10,6 +10,7 @@ import pl.coderslab.sportschool.repository.LessonRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -49,12 +50,14 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime) {
+    public void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime, List<Student> students) {
         Lesson lesson = new Lesson();
         lesson.setInstructor(instructor);
         lesson.setLessonDate(LessonDate);
         lesson.setStartTime(startTime);
+        lesson.getStudents().addAll(students);
         lessonRepository.save(lesson);
+
     }
 
     @Override

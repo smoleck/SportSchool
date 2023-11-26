@@ -18,11 +18,11 @@
   <br>
 
   <label for="startTime">Czas rozpoczęcia:</label>
-  <input type="time" th:field="*{startTime}" id="startTime">
+  <input type="time" th:field="*{startTime}" id="startTime" step="3600">
   <br>
 
   <label for="endTime">Czas zakończenia:</label>
-  <input type="time" th:field="*{endTime}" id="endTime">
+  <input type="time" th:field="*{endTime}" id="endTime" step="3600">
   <br>
 
   <button type="submit">Dodaj dostępność</button>

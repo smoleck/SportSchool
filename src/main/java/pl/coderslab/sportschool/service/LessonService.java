@@ -21,7 +21,7 @@ public interface LessonService {
 
     List<Lesson> getLessonsByDateTime(LocalDate lessonDate);
 
-    void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime) ;
+    void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime, List<Student> students) ;
 
     void updateLesson(Lesson lesson);
 

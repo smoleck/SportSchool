@@ -5,12 +5,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.sportschool.model.Instructor;
 import pl.coderslab.sportschool.model.InstructorAvailability;
+import pl.coderslab.sportschool.model.Student;
+import pl.coderslab.sportschool.model.User;
 import pl.coderslab.sportschool.service.InstructorService;
 import pl.coderslab.sportschool.service.LessonService;
 import pl.coderslab.sportschool.service.InstructorAvailabilityService;
+import pl.coderslab.sportschool.service.UserService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -23,6 +27,8 @@ public class LessonController {
     private LessonService lessonService;
     @Autowired
     private InstructorAvailabilityService instructorAvailabilityService;
+    @Autowired
+    private UserService userService;
 
 //    @Autowired
 //    public LessonController(InstructorService instructorService, LessonService lessonService, InstructorAvailabilityService instructorAvailabilityService) {
@@ -36,10 +42,15 @@ public class LessonController {
         // Pobierz listę wszystkich instruktorów
         List<Instructor> instructors = instructorService.getAllInstructors();
 
-        // Przekaż instruktorów do widoku
-        model.addAttribute("instructors", instructors);
+        // Pobierz listę wszystkich kursantów (użytkowników)
+        List<Student> students = userService.getStudentsCreatedByLoggedInUser();
 
-        // Zwróć nazwę widoku, gdzie użytkownik wybierze instruktora, datę i godzinę
+
+        // Przekaż instruktorów i kursantów do widoku
+        model.addAttribute("instructors", instructors);
+        model.addAttribute("students", students);
+
+        // Zwróć nazwę widoku, gdzie użytkownik wybierze instruktora, datę, godzinę i kursantów
         return "addLessonForm";
     }
 
@@ -54,14 +65,21 @@ public class LessonController {
     }
     // Dodaj metody do obsługi dodawania lekcji do bazy danych
     @PostMapping("/save")
-    public String saveLesson(@RequestParam Long instructorId, @RequestParam String lessonDate, @RequestParam String lessonTime) {
-        // Pobierz instruktora na podstawie ID
+    public String saveLesson(@RequestParam Long instructorId,
+                             @RequestParam String lessonDate,
+                             @RequestParam String lessonTime,
+                             @RequestParam List<Long> studentIds) {
         Instructor instructor = instructorService.getInstructorById(instructorId);
 
-        // Przetworzenie i zapisanie lekcji w bazie danych
-        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
+        // Pobierz kursantów na podstawie ich ID
+        List<Student> students = userService.getStudentsByIds(studentIds);
 
+        // Dodaj lekcję z uwzględnieniem kursantów
+        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), students);
+
+        // Usuń dostępność instruktora (jeśli to konieczne)
         instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
+
         // Przekieruj użytkownika na stronę po zapisaniu lekcji
         return "redirect:/user/home";
     }
