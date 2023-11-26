@@ -1,12 +1,11 @@
 package pl.coderslab.sportschool.controller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.coderslab.sportschool.model.Instructor;
-import pl.coderslab.sportschool.model.InstructorAvailability;
-import pl.coderslab.sportschool.model.Student;
-import pl.coderslab.sportschool.model.User;
+import pl.coderslab.sportschool.model.*;
 import pl.coderslab.sportschool.service.InstructorService;
 import pl.coderslab.sportschool.service.LessonService;
 import pl.coderslab.sportschool.service.InstructorAvailabilityService;
@@ -14,7 +13,6 @@ import pl.coderslab.sportschool.service.UserService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -66,17 +64,38 @@ public class LessonController {
                              @RequestParam List<Long> studentIds) {
         Instructor instructor = instructorService.getInstructorById(instructorId);
 
+        // Pobierz zalogowanego użytkownika
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User loggedInUser = userService.getUserByUsername(username);
+
+
+
         // Pobierz kursantów na podstawie ich ID
         List<Student> students = userService.getStudentsByIds(studentIds);
 
         // Dodaj lekcję z uwzględnieniem kursantów
-        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), students, isGroup);
+        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), students, isGroup, loggedInUser);
 
         // Usuń dostępność instruktora (jeśli to konieczne)
         instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
 
         // Przekieruj użytkownika na stronę po zapisaniu lekcji
         return "redirect:/user/home";
+    }
+
+    @GetMapping("/created")
+    public String showLessonsCreatedByLoggedInUser(Model model, Authentication authentication) {
+
+
+        // Pobierz lekcje stworzone przez zalogowanego użytkownika
+        List<Lesson> lessons = lessonService.getLessonsCreatedByLoggedInUser();
+
+        // Przekaż lekcje do widoku
+        model.addAttribute("lessons", lessons);
+
+        // Zwróć nazwę widoku, gdzie będą wyświetlane lekcje
+        return "lessonsCreatedByUser";
     }
 }
 //

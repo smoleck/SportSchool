@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lessons Created by User</title>
+</head>
+<body>
+
+<h2>Lessons Created by User</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>Lesson Date</th>
+    <th>Start Time</th>
+    <th>Instructor</th>
+
+    <!-- Dodaj inne kolumny, które chcesz wyświetlić -->
+  </tr>
+  </thead>
+  <tbody>
+  <!-- Iteruj przez lekcje i wyświetl odpowiednie dane -->
+  <tr th:each="lesson : ${lessons}">
+    <td th:text="${lesson.lessonDate}"></td>
+    <td th:text="${lesson.startTime}"></td>
+    <td th:text="${lesson.instructor.name}"></td>
+    <td>
+      <!-- Zagnieżdżona pętla dla wyświetlenia studentów -->
+      <ul>
+        <li th:each="student : ${lesson.students}" th:text="${student.name + ' ' + student.surname}"></li>
+      </ul>
+    </td>
+
+    <!-- Dodaj inne komórki, które chcesz wyświetlić -->
+  </tr>
+  </tbody>
+</table>
+<a th:href="@{/user/home}">Cofnij</a>
+</body>
+</html>

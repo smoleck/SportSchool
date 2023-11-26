@@ -41,7 +41,10 @@ public class Lesson {
     private boolean isGroup;
     @Column(name = "price")
     private BigDecimal price;
-    @ManyToMany
+    @ManyToOne
+    @JoinColumn(name = "created_by", referencedColumnName = "id")
+    private User createdBy;
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "lesson_students",
             joinColumns = @JoinColumn(name = "lesson_id"),
@@ -51,6 +54,27 @@ public class Lesson {
 
     public void setGroup(boolean group) {
         isGroup = group;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, BigDecimal price, User createdBy, Set<Student> students) {
+        this.id = id;
+        this.name = name;
+        this.instructor = instructor;
+        this.lessonDate = lessonDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.isGroup = isGroup;
+        this.price = price;
+        this.createdBy = createdBy;
+        this.students = students;
     }
 
     public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, BigDecimal price, Set<Student> students) {
