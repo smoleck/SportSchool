@@ -74,7 +74,6 @@ public class LessonController {
 
         // Dodaj lekcję z uwzględnieniem kursantów
         lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), LocalTime.parse(endTime), students, isGroup, loggedInUser);
-        System.out.println("EndTime: " + endTime);
         // Usuń dostępność instruktora (jeśli to konieczne)
         instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
 

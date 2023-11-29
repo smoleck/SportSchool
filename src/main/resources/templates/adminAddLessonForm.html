@@ -1,0 +1,107 @@
+<!-- addLesson.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Lesson</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+<h2>Add Lesson</h2>
+
+<form action="/admin/lesson/save" method="post">
+    <!-- Wybór instruktora -->
+
+
+    <div>
+        <label for="instructorId">Select Instructor:</label>
+        <select name="instructorId" id="instructorId" required>
+            <option th:each="instructor : ${instructors}"
+                    th:value="${instructor.id}"
+                    th:text="${instructor.name}"></option>
+        </select>
+    </div>
+
+    <!-- Wybór daty -->
+    <div>
+        <label for="lessonDate">Select Lesson Date:</label>
+        <input type="date" name="lessonDate" id="lessonDate" required>
+    </div>
+
+    <!-- Wybór dostępności instruktora w danym dniu -->
+    <div>
+        <label for="lessonTime">Select Lesson Time:</label>
+        <select name="lessonTime" id="lessonTime" required>
+            <!-- Lista będzie generowana dynamicznie w oparciu o dostępność instruktora w danym dniu -->
+        </select>
+    </div>
+    <div>
+        <label for="lessonEndTime">Godzina zakończenia lekcji:</label>
+        <select name="endTime" id="lessonEndTime" required>
+            <!-- Tutaj generujesz opcje dla endTime -->
+        </select>
+    </div>
+    <div>
+        <label>Is group?</label>
+        <input type="checkbox" name="isGroup" value="0">
+    </div>
+
+    <div th:each="student, iterStat : ${students}">
+        <input type="checkbox" th:id="${'student_' + student.id}" th:name="studentIds" th:value="${student.id}" />
+        <label th:for="${'student_' + student.id}" th:text="${student.name + ' ' + student.surname}"></label><br />
+    </div>
+
+    <button type="submit">Add Lesson</button>
+
+</form>
+
+<script th:inline="javascript">
+
+    $(document).ready(function() {
+        // Obsługa zmiany daty
+        $('#lessonDate').on('change', function() {
+            updateAvailability();
+        });
+
+        // Obsługa zmiany instruktora
+        $('#instructorId').on('change', function() {
+            updateAvailability();
+        });
+
+        function updateAvailability() {
+            var selectedDate = $('#lessonDate').val();
+            var selectedInstructor = $('#instructorId').val();
+
+            // Pobierz dostępność instruktora w danym dniu z kontrolera
+            $.get('/admin/lesson/availability', { date: selectedDate, instructorId: selectedInstructor }, function(data) {
+                console.log(data);
+
+                // Wypełnij rozwijaną listę z dostępnymi godzinami rozpoczęcia
+                var timeDropdown = $('#lessonTime');
+                timeDropdown.empty();
+                $.each(data, function(index, value) {
+                    timeDropdown.append('<option value="' + value + '">' + value + '</option>');
+                });
+
+                // Wypełnij rozwijaną listę z dostępnymi godzinami zakończenia
+                var endTimeDropdown = $('#lessonEndTime');
+                endTimeDropdown.empty();
+
+                // Pobierz maksymalną godzinę dostępności
+                var maxAvailabilityHour = parseInt(data[data.length - 1].split(':')[0]);
+
+                // Generuj opcje dla endTime z interwałem 1 godziny
+                for (var i = 1; i <= maxAvailabilityHour + 1; i++) {
+                    var hour = i.toString().padStart(2, '0');
+                    endTimeDropdown.append('<option value="' + hour + ':00">' + hour + ':00</option>');
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
+
+
+

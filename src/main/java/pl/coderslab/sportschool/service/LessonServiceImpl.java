@@ -88,12 +88,10 @@ public class LessonServiceImpl implements LessonService {
                 price = new BigDecimal("180");
             } else if (numberOfStudents >= 3) {
                 price = new BigDecimal("250");
-            } else {
-                // Dodaj obsługę sytuacji, gdy liczba kursantów jest mniejsza niż 1
-                throw new IllegalArgumentException("Liczba kursantów mniejsza niż 1");
-            }
 
-            lesson.setPrice(price);
+
+                lesson.setPrice(price);
+            }
         }
 
         lessonRepository.save(lesson);

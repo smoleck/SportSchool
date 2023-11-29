@@ -79,7 +79,9 @@ public class UserService implements UserDetailsService {
         }
         return Collections.emptyList();
     }
-
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
     public List<Student> getStudentsByIds(List<Long> studentIds) {
         return studentRepository.findAllById(studentIds);
     }

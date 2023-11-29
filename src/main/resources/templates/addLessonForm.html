@@ -119,6 +119,7 @@
 
             // Pobierz dostępność instruktora w danym dniu z kontrolera
             $.get('/user/lesson/availability', { date: selectedDate, instructorId: selectedInstructor }, function(data) {
+                console.log(data);
                 // Wypełnij rozwijaną listę z dostępnymi godzinami
                 var timeDropdown = $('#lessonTime');
                 timeDropdown.empty();
