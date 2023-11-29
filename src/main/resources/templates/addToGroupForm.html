@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add to Group Form</title>
+</head>
+<body>
+
+<h2>Add Students to Group Lesson</h2>
+
+<form th:action="@{/user/lesson/addToGroup}" method="post">
+    <div>
+        <label for="lessonId">Select Group Lesson:</label>
+        <select id="lessonId" name="lessonId">
+            <option th:each="lesson : ${futureGroupLessons}" th:value="${lesson.id}" th:text="${lesson.lessonDate+'   '+lesson.startTime+'-'+lesson.endTime+'   '+lesson.instructor.name}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label for="newStudentId">Select Student to Add:</label>
+        <select id="newStudentId" name="newStudentId">
+            <option th:each="student : ${students}" th:value="${student.id}" th:text="${student.name}"></option>
+        </select>
+    </div>
+
+    <button type="submit">Add Student to Lesson</button>
+</form>
+
+</body>
+</html>

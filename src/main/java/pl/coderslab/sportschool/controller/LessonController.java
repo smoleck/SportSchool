@@ -94,5 +94,29 @@ public class LessonController {
         // Zwróć nazwę widoku, gdzie będą wyświetlane lekcje
         return "lessonsCreatedByUser";
     }
+
+
+
+
+    @GetMapping("/addToGroup")
+    public String addToGroup(Model model){
+        List<Lesson> futureGroupLessons = lessonService.getFutureGroupLessons();
+        List<Student> students = userService.getStudentsCreatedByLoggedInUser();
+
+        model.addAttribute("students", students);
+        model.addAttribute("futureGroupLessons", futureGroupLessons);
+
+        return "addToGroupForm";
+    }
+
+    @PostMapping("/addToGroup")
+    public String addStudentsToLesson(@RequestParam Long lessonId,
+                                      @RequestParam Long newStudentId) {
+        // Dodaj wybranych studentów do lekcji o podanym ID
+        lessonService.addStudentToLesson(lessonId, newStudentId);
+
+        // Przekieruj użytkownika z powrotem do widoku lekcji grupowych
+        return "redirect:/user/home";
+    }
 }
 //

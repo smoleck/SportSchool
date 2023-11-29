@@ -27,12 +27,14 @@ public interface LessonService {
     List<Lesson> getLessonsCreatedByLoggedInUser();
     List<Lesson> findAllOrderedByLessonDateDesc();
 
-
+    public List<Lesson> getGroupLessons();
     void updateLesson(Lesson lesson);
+    public void saveLesson(Lesson lesson);
 
     void deleteLesson(Long id);
     void removeStudentFromLesson(Long lessonId, Long studentId);
     public void addStudentToLesson(Long lessonId, Long studentId);
+    List<Lesson> getFutureGroupLessons();
 
 
 

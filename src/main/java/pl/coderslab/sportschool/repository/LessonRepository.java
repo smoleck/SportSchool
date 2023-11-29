@@ -24,5 +24,8 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Query("SELECT l FROM Lesson l ORDER BY l.lessonDate DESC")
     List<Lesson> findAllOrderedByLessonDateDesc();
+    List<Lesson> findByIsGroup(boolean isGroup);
+    @Query("SELECT l FROM Lesson l WHERE l.lessonDate > CURRENT_DATE AND l.isGroup = true")
+    List<Lesson> findFutureGroupLessons();
 
 }

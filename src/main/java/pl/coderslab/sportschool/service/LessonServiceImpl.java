@@ -134,7 +134,8 @@ public class LessonServiceImpl implements LessonService {
         }
     }
 
-
+    @Override
+    @Transactional
     public void saveLesson(Lesson lesson) {
         lessonRepository.save(lesson);
     }
@@ -152,6 +153,10 @@ public class LessonServiceImpl implements LessonService {
             studentRepository.save(studentToRemove);
         }
     }
+    @Override
+    public List<Lesson> getGroupLessons() {
+        return lessonRepository.findByIsGroup(true);
+    }
 
     @Override
     @Transactional
@@ -164,6 +169,9 @@ public class LessonServiceImpl implements LessonService {
     public void deleteLesson(Long id) {
         lessonRepository.deleteById(id);
     }
-
+    @Override
+    public List<Lesson> getFutureGroupLessons() {
+        return lessonRepository.findFutureGroupLessons();
+    }
 
 }

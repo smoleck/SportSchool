@@ -43,9 +43,10 @@
         </select>
     </div>
     <div>
-        <label>Is group?</label>
-        <input type="checkbox" name="isGroup" value="0">
+        <input type="checkbox" name="isGroup" id="isGroup">
+        <label for="isGroup">Is group?</label>
     </div>
+
 
     <div th:each="student, iterStat : ${students}">
         <input type="checkbox" th:id="${'student_' + student.id}" th:name="studentIds" th:value="${student.id}" />

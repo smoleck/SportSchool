@@ -1,0 +1,35 @@
+<!-- groupLessons.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Lessons</title>
+</head>
+<body>
+<h2>Group Lessons</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>Lesson ID</th>
+    <th>Instructor</th>
+    <th>Lesson Date</th>
+    <th>Number of Students</th>
+    <!-- Dodaj inne kolumny według potrzeb -->
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="lesson : ${groupLessons}">
+    <td th:text="${lesson.id}"></td>
+    <td th:text="${lesson.instructor.name}"></td>
+    <td th:text="${#temporals.format(lesson.lessonDate, 'yyyy-MM-dd')}"></td>
+    <td th:text="${lesson.students.size()}"></td>
+    <td><a th:href="@{/user/lesson/group-lessons/{lessonId}/addStudent(lessonId=${lesson.id})}">Dodaj kursantów</a></td>
+
+    <!-- Dodaj inne kolumny według potrzeb -->
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
