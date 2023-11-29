@@ -47,7 +47,7 @@
     </div>
 
     <!-- Dodaj miejsce na wyświetlenie liczby zaznaczonych checkboxów -->
-    <p id="selectedCount">Liczba zaznaczonych: 0</p>
+    <p id="selectedCount" hidden>Liczba zaznaczonych: 0</p>
     <button type="submit">Add Lesson</button>
 
     <p id="selectedPrice">Cena: 0 zł</p>
@@ -132,60 +132,5 @@
 </body>
 </html>
 
-
-
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Add Lesson</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h2>Add Lesson</h2>-->
-
-<!--&lt;!&ndash; Jeśli istnieje parametr "success" w adresie, wyświetl komunikat o sukcesie &ndash;&gt;-->
-<!--<div th:if="${param.success}">-->
-<!--    <p style="color: green;">Lesson added successfully!</p>-->
-<!--</div>-->
-
-<!--&lt;!&ndash; Formularz dodawania lekcji &ndash;&gt;-->
-<!--<form th:action="@{/user/lesson/add}" th:object="${lesson}" method="post">-->
-<!--    &lt;!&ndash; Instruktorzy (wybór) &ndash;&gt;-->
-<!--    <label for="instructor">Select Instructor:</label>-->
-<!--    <select id="instructor" th:field="*{instructor.id}">-->
-<!--        <option th:each="instructor : ${instructors}" th:value="${instructor.id}" th:text="${instructor.name}"></option>-->
-<!--    </select>-->
-<!--    <br>-->
-
-<!--    &lt;!&ndash; Rodzaj lekcji (grupowa/indywidualna) &ndash;&gt;-->
-<!--    <label for="isGroup">Group Lesson:</label>-->
-<!--    <input type="checkbox" id="isGroup" th:field="*{group}" />-->
-<!--    <br>-->
-
-<!--    &lt;!&ndash; Data lekcji &ndash;&gt;-->
-<!--    <label for="lessonDate">Lesson Date:</label>-->
-<!--    <input type="date" id="lessonDate" th:field="*{lessonDate}" />-->
-<!--    <br>-->
-
-<!--    &lt;!&ndash; Czas rozpoczęcia &ndash;&gt;-->
-<!--    <label for="startTime">Start Time:</label>-->
-<!--    <input type="time" id="startTime" th:field="*{startTime}" />-->
-<!--    <br>-->
-
-<!--    &lt;!&ndash; Czas zakończenia &ndash;&gt;-->
-<!--    <label for="endTime">End Time:</label>-->
-<!--    <input type="time" id="endTime" th:field="*{endTime}" />-->
-<!--    <br>-->
-
-<!--    &lt;!&ndash; Przycisk do dodawania lekcji &ndash;&gt;-->
-<!--    <button type="submit">Add Lesson</button>-->
-<!--</form>-->
-
-<!--&lt;!&ndash; Przycisk do powrotu do listy lekcji &ndash;&gt;-->
-<!--<a th:href="@{/user/home}">Back to Lesson List</a>-->
-<!--</body>-->
-<!--</html>-->
 
 
