@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Inne elementy w head -->
+</head>
+<body>
+<!-- Treść body -->
+
+<h2>All Students for Lesson</h2>
+
+<h3>Lesson Information:</h3>
+<p th:text="${'Lesson ID: ' + lesson.id}"></p>
+<p th:text="${'Lesson Name: ' + lesson.name}"></p>
+
+<h3>All Students:</h3>
+<form th:action="@{|/admin/lesson/edit/${lesson.id}/removeStudent|}" method="post">
+  <ul>
+    <li th:each="student : ${allStudentsForLesson}">
+      <span th:text="${student.name + ' ' + student.surname}"></span>
+      <button type="submit" name="studentId" th:value="${student.id}" onclick="return confirm('Are you sure you want to remove this student from the lesson?')">Remove</button>
+    </li>
+  </ul>
+</form>
+<br>
+<br>
+
+<h3>Add Student to Lesson:</h3>
+<form th:action="@{|/admin/lesson/edit/${lesson.id}/addStudent|}" method="post">
+  <select name="newStudentId">
+    <option th:each="student : ${allStudentsNotInLesson}" th:value="${student.id}" th:text="${student.name + ' ' + student.surname}"></option>
+  </select>
+  <button type="submit">Add Student</button>
+</form>
+
+<br>
+<a th:href="@{/admin/lesson/all}">Back to Lessons</a>
+
+</body>
+</html>

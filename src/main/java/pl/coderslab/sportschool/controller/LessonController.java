@@ -6,10 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.sportschool.model.*;
-import pl.coderslab.sportschool.service.InstructorService;
-import pl.coderslab.sportschool.service.LessonService;
-import pl.coderslab.sportschool.service.InstructorAvailabilityService;
-import pl.coderslab.sportschool.service.UserService;
+import pl.coderslab.sportschool.service.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,7 +19,7 @@ public class LessonController {
     @Autowired
     private InstructorService instructorService;
     @Autowired
-    private LessonService lessonService;
+    private LessonServiceImpl lessonService;
     @Autowired
     private InstructorAvailabilityService instructorAvailabilityService;
     @Autowired
@@ -60,6 +57,7 @@ public class LessonController {
     public String saveLesson(@RequestParam Long instructorId,
                              @RequestParam String lessonDate,
                              @RequestParam String lessonTime,
+                             @RequestParam String endTime,
                              @RequestParam boolean isGroup,
                              @RequestParam List<Long> studentIds) {
         Instructor instructor = instructorService.getInstructorById(instructorId);
@@ -75,8 +73,8 @@ public class LessonController {
         List<Student> students = userService.getStudentsByIds(studentIds);
 
         // Dodaj lekcję z uwzględnieniem kursantów
-        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), students, isGroup, loggedInUser);
-
+        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), LocalTime.parse(endTime), students, isGroup, loggedInUser);
+        System.out.println("EndTime: " + endTime);
         // Usuń dostępność instruktora (jeśli to konieczne)
         instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
 
@@ -85,7 +83,7 @@ public class LessonController {
     }
 
     @GetMapping("/created")
-    public String showLessonsCreatedByLoggedInUser(Model model, Authentication authentication) {
+    public String showLessonsCreatedByLoggedInUser(Model model) {
 
 
         // Pobierz lekcje stworzone przez zalogowanego użytkownika

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Lessons</title>
+</head>
+<body>
+
+<h2>All Lessons</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Lesson Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Instructor</th>
+        <th>Students</th>
+        <!-- Dodaj inne kolumny, które chcesz wyświetlić -->
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Iteruj przez wszystkie lekcje i wyświetl odpowiednie dane -->
+    <tr th:each="lesson : ${allLessons}">
+        <td th:text="${lesson.id}"></td>
+        <td th:text="${lesson.lessonDate}"></td>
+        <td th:text="${lesson.startTime}"></td>
+        <td th:text="${lesson.endTime}"></td>
+        <td th:text="${lesson.instructor.name}"></td>
+        <td>
+            <!-- Zagnieżdżona pętla dla wyświetlenia studentów -->
+            <ul>
+                <li th:each="student : ${lesson.students}" th:text="${student.name + ' ' + student.surname}"></li>
+            </ul>
+        </td>
+        <td><a th:href="@{/admin/lesson/edit/{id}(id=${lesson.id})}">Edytuj</a></td>
+        <td><a th:href="@{/admin/lesson/delete/{id}(id=${lesson.id})}">Usuń</a></td>
+
+        <!-- Dodaj inne komórki, które chcesz wyświetlić -->
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/admin/home}">Cofnij</a>
+
+</body>
+</html>

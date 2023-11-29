@@ -22,13 +22,17 @@ public interface LessonService {
 
     List<Lesson> getLessonsByDateTime(LocalDate lessonDate);
 
-    void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime, List<Student> students, boolean isGroup, User user) ;
+    void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime, LocalTime endTime, List<Student> students, boolean isGroup, User user) ;
 
     List<Lesson> getLessonsCreatedByLoggedInUser();
+    List<Lesson> findAllOrderedByLessonDateDesc();
+
 
     void updateLesson(Lesson lesson);
 
     void deleteLesson(Long id);
+    void removeStudentFromLesson(Long lessonId, Long studentId);
+    public void addStudentToLesson(Long lessonId, Long studentId);
 
 
 
