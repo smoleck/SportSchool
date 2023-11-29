@@ -1,21 +1,16 @@
 package pl.coderslab.sportschool.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.coderslab.sportschool.model.Instructor;
+import pl.coderslab.sportschool.model.InstructorAvailability;
 import pl.coderslab.sportschool.model.Lesson;
 import pl.coderslab.sportschool.model.Student;
 import pl.coderslab.sportschool.service.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/lesson")
@@ -24,12 +19,14 @@ public class AdminLessonController {
     private final LessonService lessonService;
     private final InstructorService instructorService;
     private final StudentService studentService;
+    private final InstructorAvailabilityService instructorAvailabilityService;
 
     @Autowired
-    public AdminLessonController(LessonService lessonService, InstructorService instructorService, StudentService studentService) {
+    public AdminLessonController(LessonService lessonService, InstructorService instructorService, StudentService studentService, InstructorAvailabilityService instructorAvailabilityService) {
         this.lessonService = lessonService;
         this.instructorService = instructorService;
         this.studentService = studentService;
+        this.instructorAvailabilityService = instructorAvailabilityService;
     }
 
     @GetMapping("/all")
@@ -73,6 +70,9 @@ public class AdminLessonController {
 
     @GetMapping("/delete/{lessonId}")
     public String deleteLesson(@PathVariable Long lessonId) {
+        Lesson lesson= lessonService.getLessonById(lessonId);
+        instructorAvailabilityService.addInstructorAvailability(lesson.getInstructor(), lesson.getLessonDate(),lesson.getStartTime(), lesson.getEndTime());
+
         lessonService.deleteLesson(lessonId);
         return "redirect:/admin/lesson/all";
     }
