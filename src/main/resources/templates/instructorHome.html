@@ -8,6 +8,25 @@
 <body>
 <h2>Welcome Instructor!</h2>
 <p>This is the instructor home page.</p>
+
+<div th:if="${nextLesson != null}">
+  <p>Najbliższa lekcja:</p>
+  <p>Data: <span th:text="${nextLesson.lessonDate+' '+nextLesson.startTime}"></span></p>
+  <td>
+    <p>Kursanci:</p>
+  <!-- Zagnieżdżona pętla dla wyświetlenia studentów -->
+  <ul>
+    <li th:each="student : ${nextLesson.students}" th:text="${student.name + ' ' + student.surname}"></li>
+  </ul>
+  </td>
+  <!-- Dodaj inne informacje o lekcji, które chcesz wyświetlić -->
+</div>
+<div th:if="${nextLesson == null}">
+  <p>Brak najbliższej lekcji.</p>
+</div>
+<br>
 <a href="/logout">Logout</a>
+<br>
+<a href="/instructor/lesson/all">Moje wszystkie lekcje</a>
 </body>
 </html>

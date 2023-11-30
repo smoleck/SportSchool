@@ -1,0 +1,39 @@
+<!-- instructorLessons.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Lessons</title>
+</head>
+<body>
+<h2>Instructor Lessons</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Lesson Date</th>
+        <th>Lesson Start</th>
+        <th>Lesson End</th>
+        <th>Students</th>
+        <!-- Dodaj inne kolumny według potrzeb -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lesson : ${instructorLessons}">
+
+        <td th:text="${lesson.lessonDate}"></td>
+        <td th:text="${lesson.startTime}"></td>
+        <td th:text="${lesson.endTime}"></td>
+        <td>
+            <!-- Zagnieżdżona pętla dla wyświetlenia studentów -->
+            <ul>
+                <li th:each="student : ${lesson.students}" th:text="${student.name + ' ' + student.surname}"></li>
+            </ul>
+        </td>
+        <!-- Dodaj inne kolumny według potrzeb -->
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

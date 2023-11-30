@@ -6,9 +6,9 @@ import pl.coderslab.sportschool.model.Student;
 import pl.coderslab.sportschool.model.User;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface LessonService {
 
@@ -36,6 +36,9 @@ public interface LessonService {
     public void addStudentToLesson(Long lessonId, Long studentId);
     List<Lesson> getFutureGroupLessons();
 
+    public Lesson getNextLessonForInstructor(String instructorName);
+
+    List<Lesson> getAllInstructorLessons(String instructorUsername);
 
 
 }

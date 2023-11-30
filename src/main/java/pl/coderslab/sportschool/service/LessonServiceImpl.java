@@ -174,4 +174,16 @@ public class LessonServiceImpl implements LessonService {
         return lessonRepository.findFutureGroupLessons();
     }
 
+
+    @Override
+    public Lesson getNextLessonForInstructor(String instructorName){
+        return lessonRepository.findNearestLessonForInstructorByName(instructorName);
+    }
+
+    @Override
+    public List<Lesson> getAllInstructorLessons(String instructorUsername) {
+        // Pobierz wszystkie lekcje przypisane do danego instruktora
+        return lessonRepository.findByInstructorUsername(instructorUsername);
+    }
+
 }

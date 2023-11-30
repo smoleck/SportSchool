@@ -96,6 +96,7 @@ public class AdminLessonController {
         // Przekaż instruktorów i kursantów do widoku
         model.addAttribute("instructors", instructors);
         model.addAttribute("students", students);
+        model.addAttribute("isGroup", false);
 
         // Zwróć nazwę widoku, gdzie użytkownik wybierze instruktora, datę, godzinę i kursantów
         return "adminAddLessonForm";
@@ -115,7 +116,8 @@ public class AdminLessonController {
                              @RequestParam String lessonDate,
                              @RequestParam String lessonTime,
                              @RequestParam String endTime,
-                             @RequestParam boolean isGroup) {
+                             @RequestParam boolean isGroup,
+                             @RequestParam List<Long> studentIds) {
         Instructor instructor = instructorService.getInstructorById(instructorId);
 
         // Pobierz zalogowanego użytkownika
@@ -125,7 +127,7 @@ public class AdminLessonController {
 
 
         // Pobierz kursantów na podstawie ich ID
-        List<Student> students = new ArrayList<>();
+        List<Student> students = userService.getStudentsByIds(studentIds);
 
         // Dodaj lekcję z uwzględnieniem kursantów
         lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), LocalTime.parse(endTime), students, isGroup, loggedInUser);

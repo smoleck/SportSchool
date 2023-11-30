@@ -29,6 +29,7 @@ public class Lesson {
 
     @Column(name = "lesson_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+
     private LocalDate lessonDate;
 
     @Column(name = "start_time")
