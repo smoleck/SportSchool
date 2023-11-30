@@ -176,8 +176,8 @@ public class LessonServiceImpl implements LessonService {
 
 
     @Override
-    public Lesson getNextLessonForInstructor(String instructorName){
-        return lessonRepository.findNearestLessonForInstructorByName(instructorName);
+    public List<Lesson> getNextLessonForInstructor(String instructorName){
+        return lessonRepository.nextLessonForInstructorByName(instructorName);
     }
 
     @Override

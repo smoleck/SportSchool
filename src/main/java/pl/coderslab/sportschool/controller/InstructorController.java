@@ -25,9 +25,10 @@ public class InstructorController {
     @GetMapping("/home")
     public String instructorHome(Model model, Principal principal) {
     String instructorUsername = principal.getName();
-    Lesson nextLesson = lessonService.getNextLessonForInstructor(instructorUsername);
+    Optional<Lesson> nextLesson = lessonService.getNextLessonForInstructor(instructorUsername).stream().findFirst();
 
-    model.addAttribute("nextLesson", nextLesson);
+
+    model.addAttribute("nextLesson", nextLesson.orElse(null));
 
 
         return "instructorHome";
