@@ -31,9 +31,9 @@ public class InstructorController {
     @GetMapping("/home")
     public String instructorHome(Model model, Principal principal) {
     String instructorUsername = principal.getName();
+    instructorService.updateEarningsForCompletedLessons(instructorUsername);
     Instructor instructor=instructorService.getInstructorByUsername(instructorUsername);
     Optional<Lesson> nextLesson = lessonService.getNextLessonForInstructor(instructorUsername).stream().findFirst();
-    instructorService.updateEarningsForCompletedLessons(instructorUsername);
     Long earnings=instructor.getEarnings();
 
     model.addAttribute("nextLesson", nextLesson.orElse(null));

@@ -2,9 +2,7 @@ package pl.coderslab.sportschool.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.sportschool.model.Instructor;
 import pl.coderslab.sportschool.model.Lesson;
 import pl.coderslab.sportschool.service.InstructorService;
@@ -45,7 +43,22 @@ public class AdminController {
         return "redirect:/admin/addInstructorForm?success";
     }
 
+    @GetMapping("/instructorPayout")
+    public String instructorPayout(Model model){
+        instructorService.updateEarningsForCompletedLessonsForAll();
+        List<Instructor> allInstructors = instructorService.getAllInstructors();
+        model.addAttribute("allInstructors", allInstructors);
 
+        return "instructorPayout";
+    }
 
+    @PostMapping("/instructorPayout/resetEarnings")
+    public String resetEarnings(@RequestParam Long instructorId) {
+        // Resetuj zarobki i ustaw lastResetDateTime
+        instructorService.resetEarnings(instructorId);
+
+        // Przekieruj użytkownika z powrotem do strony z listą instruktorów po zresetowaniu
+        return "redirect:/admin/instructorPayout";
+    }
 
 }

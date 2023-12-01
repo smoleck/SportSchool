@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instructor Payout</title>
+</head>
+<body>
+
+<h1>Instructor Payout</h1>
+
+<!-- Lista instruktorów -->
+<ul th:each="instructor : ${allInstructors}">
+  <li>
+    <!-- Wyświetl informacje o instruktorze -->
+    <span th:text="${instructor.name + ' ' + instructor.surname}"></span> -
+    <span th:text="${instructor.earnings}"></span>
+
+    <!-- Formularz resetu zarobków dla instruktora -->
+    <form action="/admin/instructorPayout/resetEarnings" method="post">
+      <input type="hidden" name="instructorId" th:value="${instructor.id}" />
+      <button type="submit">Reset Earnings</button>
+    </form>
+  </li>
+</ul>
+
+<!-- Dodaj resztę treści strony -->
+
+</body>
+</html>

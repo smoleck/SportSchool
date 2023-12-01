@@ -72,7 +72,7 @@ public class InstructorService implements UserDetailsService {
 
     public void updateEarningsForCompletedLessons(String instructorUsername) {
         Instructor instructor = instructorRepository.findByUsername(instructorUsername);
-
+        instructor.setEarnings(0L);
 
         Long earnings = instructor.getEarnings();
         LocalDateTime lastResetDateTime = instructor.getLastResetDateTime();
@@ -105,5 +105,23 @@ public class InstructorService implements UserDetailsService {
         instructor.setEarnings(earnings);
         instructorRepository.save(instructor);
     }
+    public void updateEarningsForCompletedLessonsForAll() {
+        List<Instructor> allInstructors = instructorRepository.findAll();
 
+        for (Instructor instructor : allInstructors) {
+            updateEarningsForCompletedLessons(instructor.getUsername());
+        }
+    }
+
+    public void resetEarnings(Long instructorId) {
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+
+        optionalInstructor.ifPresent(instructor -> {
+            // Ustaw datę i czas ostatniego zerowania zarobków na aktualną datę i czas
+            instructor.setLastResetDateTime(LocalDateTime.now());
+            instructor.setEarnings(0L);
+
+            instructorRepository.save(instructor);
+        });
+    }
 }
