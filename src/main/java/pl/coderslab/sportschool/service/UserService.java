@@ -43,14 +43,20 @@ public class UserService implements UserDetailsService {
                 .roles(user.getRole())
                 .build();
     }
+    public boolean isUsernameUnique(String username) {
+        return userRepository.findByUsername(username) == null;
+    }
 
-    public void addUser(String username, String password, String role) {
+    public void addUser(String username, String password, String role, String email, String phoneNumber ) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("USER");
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
         userRepository.save(user);
     }
+
 
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);

@@ -3,14 +3,18 @@ package pl.coderslab.sportschool.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import pl.coderslab.sportschool.model.Student;
 import pl.coderslab.sportschool.model.User;
 import pl.coderslab.sportschool.service.UserService;
 import pl.coderslab.sportschool.service.StudentService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -32,14 +36,23 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user, Model model) {
+    public String registerUser(@ModelAttribute("user") @Valid User user, BindingResult result, Model model) {
+        if (!userService.isUsernameUnique(user.getUsername())) {
+            result.rejectValue("username", "error.user", "Nazwa użytkownika już istnieje");
+        }
 
+        if (result.hasErrors()) {
+            return "addUserForm";
+        }
 
-        userService.addUser(user.getUsername(), user.getPassword(), user.getRole());
+        userService.addUser(user.getUsername(), user.getPassword(), user.getRole(), user.getEmail(), user.getPhoneNumber());
         return "redirect:/login";
     }
     @GetMapping("/user/home")
-    public String userHome() {
+    public String userHome(Model model,Principal principal) {
+        String username = principal.getName();
+        model.addAttribute("username", username);
+        userService.getUserByUsername(username);
         return "userHome";
     }
 

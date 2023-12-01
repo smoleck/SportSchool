@@ -28,6 +28,10 @@ public class User {
 
     @Column(name = "role")
     private String role;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
 
     public Long getId() {
         return id;
@@ -48,12 +52,32 @@ public class User {
     public User() {}
 
 
-    public User(Long id, String username, String password, String role, List<Student> students) {
+
+
+    public User(Long id, String username, String password, String role, String email, String phoneNumber, List<Student> students) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.students = students;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     // Getters and setters

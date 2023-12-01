@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +7,16 @@
 </head>
 <body>
 
-<h2>Lessons Created by User</h2>
+<h2>Twoje lekcje</h2>
 
 <table>
   <thead>
   <tr>
-    <th>Lesson Date</th>
-    <th>Start Time</th>
-    <th>End Time</th>
-    <th>Instructor</th>
-    <th>Students</th>
+    <th>Data</th>
+    <th>Start</th>
+    <th>Koniec</th>
+    <th>Instruktor</th>
+    <th>Kursanci</th>
 
     <!-- Dodaj inne kolumny, które chcesz wyświetlić -->
   </tr>
@@ -39,6 +39,7 @@
   </tr>
   </tbody>
 </table>
+<br>
 <a th:href="@{/user/home}">Cofnij</a>
 </body>
 </html>

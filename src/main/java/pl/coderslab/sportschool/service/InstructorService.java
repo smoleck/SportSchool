@@ -55,6 +55,7 @@ public class InstructorService implements UserDetailsService {
         instructor.setRole("INSTRUCTOR");
         instructor.setPassword(passwordEncoder.encode(password));
         instructorRepository.save(instructor);
+        instructor.setLastResetDateTime(LocalDateTime.now());
     }
 
     public Instructor getInstructorByUsername(String username) {

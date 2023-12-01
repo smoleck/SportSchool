@@ -1,22 +1,39 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Rejestracja</title>
 </head>
 <body>
-<h2>User Registration</h2>
-<form action="/register" method="post" th:action="@{/register}">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" th:required="true">
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" th:required="true">
-    <br>
 
-    <button type="submit">Register</button>
+<h2>Formularz rejestracji</h2>
+
+<!-- Dodaj sekcję dla komunikatów błędów -->
+<div th:if="${#fields.hasErrors('user.username')}" class="alert alert-danger">
+    <p th:errors="*{user.username}"></p>
+</div>
+
+<!-- Formularz rejestracji -->
+<form th:object="${user}" method="post" action="/register">
+
+    <!-- Pola formularza -->
+    <label for="username">Nazwa użytkownika:</label>
+    <input type="text" id="username" name="username" th:field="*{username}" required>
+    <br/>
+    <label for="password">Hasło:</label>
+    <input type="password" id="password" name="password" th:field="*{password}" required>
+    <br/>
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" th:field="*{email}" required>
+    <br/>
+    <label for="phoneNumber">Numer telefonu:</label>
+    <input type="phoneNumber" id="phoneNumber" name="phoneNumber" th:field="*{phoneNumber}" required>
+    <br/>
+
+    <!-- Pozostałe pola formularza -->
+
+    <button type="submit">Zarejestruj</button>
 </form>
+
 </body>
 </html>

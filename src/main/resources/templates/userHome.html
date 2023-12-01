@@ -6,17 +6,16 @@
     <title>User Home</title>
 </head>
 <body>
-<h2>Welcome User!</h2>
-<p>This is the user home page.</p>
-<a href="/logout">Logout</a>
+<h2><span th:text="'Cześć '+${username}"></span></h2>
+
+<a th:href="@{/user/addStudent}">Dodaj nowego kursanta</a>
 <br>
-<a th:href="@{/user/addStudent}">Dodaj nowego studenta</a>
+<a th:href="@{/user/lesson/add}">Dodaj lekcje indywidualną</a>
 <br>
-<a th:href="@{/user/lesson/add}">Dodaj lekcje indywidualna</a>
-<br>
-<a th:href="@{/user/lesson/addToGroup}">Zapisz sie na lekcje grupowa</a>
+<a th:href="@{/user/lesson/addToGroup}">Zapisz się na lekcje grupową</a>
 <br>
 <a th:href="@{/user/lesson/created}">Moje lekcje</a>
-
+<br>
+<a href="/logout">Logout</a>
 </body>
 </html>
