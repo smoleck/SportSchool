@@ -7,8 +7,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.coderslab.sportschool.model.Instructor;
+import pl.coderslab.sportschool.model.Lesson;
+import pl.coderslab.sportschool.model.Student;
 import pl.coderslab.sportschool.repository.InstructorRepository;
+import pl.coderslab.sportschool.repository.LessonRepository;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,11 +21,13 @@ import java.util.Optional;
 public class InstructorService implements UserDetailsService {
 
     private final InstructorRepository instructorRepository;
+    private final LessonRepository lessonRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public InstructorService(InstructorRepository instructorRepository, BCryptPasswordEncoder passwordEncoder) {
+    public InstructorService(InstructorRepository instructorRepository, LessonRepository lessonRepository, BCryptPasswordEncoder passwordEncoder) {
         this.instructorRepository = instructorRepository;
+        this.lessonRepository = lessonRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -60,6 +67,43 @@ public class InstructorService implements UserDetailsService {
     public Instructor getInstructorById(Long instructorId) {
         Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
         return optionalInstructor.orElse(null);
+    }
+
+
+    public void updateEarningsForCompletedLessons(String instructorUsername) {
+        Instructor instructor = instructorRepository.findByUsername(instructorUsername);
+
+
+        Long earnings = instructor.getEarnings();
+        LocalDateTime lastResetDateTime = instructor.getLastResetDateTime();
+
+        List<Lesson> lessons = lessonRepository.findByInstructor(instructor);
+
+        for (Lesson lesson : lessons) {
+            LocalDateTime lessonEndDateTime = (lesson.getLessonDate()).atTime(lesson.getEndTime());
+            List<Student> students = lesson.getStudents();
+            int numberOfStudents = students.size();
+
+
+            // Sprawdź, czy lekcja już się odbyła (czy czas zakończenia lekcji jest po ostatnim zresetowaniu zarobków)
+            if (lessonEndDateTime.isAfter(lastResetDateTime) && lessonEndDateTime.isBefore(LocalDateTime.now())){
+                if (lesson.isGroup()) {
+                    earnings += 80;
+                } else {///
+                    if (numberOfStudents == 1) {
+                        earnings += 50;
+                    } else if (numberOfStudents == 2) {
+                        earnings += 70;
+                    } else if (numberOfStudents == 3) {
+                        earnings += 90;
+                    }
+                    // Możesz dodać więcej warunków, jeżeli liczba kursantów jest większa niż 3
+                }
+            }
+        }
+
+        instructor.setEarnings(earnings);
+        instructorRepository.save(instructor);
     }
 
 }

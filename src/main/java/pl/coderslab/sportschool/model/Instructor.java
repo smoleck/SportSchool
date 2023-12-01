@@ -1,6 +1,7 @@
 package pl.coderslab.sportschool.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +33,10 @@ public class Instructor {
     private String email;
     @Column(name = "role")
     private String role;
+    @Column(name = "earnings")
+    private Long earnings;
+    @Column(name = "lastResetDateTime")
+    private LocalDateTime lastResetDateTime;
 
     @OneToMany(mappedBy = "instructor")
     private Set<InstructorAvailability> availabilities = new HashSet<>();
@@ -133,6 +138,37 @@ public class Instructor {
         this.role = role;
         this.availabilities = availabilities;
         this.lessons = lessons;
+    }
+
+    public Instructor(Long id, String name, String surname, String username, String password, String phone, String email, String role, Long earnings, LocalDateTime lastResetDateTime, Set<InstructorAvailability> availabilities, Set<Lesson> lessons) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.role = role;
+        this.earnings = earnings;
+        this.lastResetDateTime = lastResetDateTime;
+        this.availabilities = availabilities;
+        this.lessons = lessons;
+    }
+
+    public Long getEarnings() {
+        return earnings;
+    }
+
+    public void setEarnings(Long earnings) {
+        this.earnings = earnings;
+    }
+
+    public LocalDateTime getLastResetDateTime() {
+        return lastResetDateTime;
+    }
+
+    public void setLastResetDateTime(LocalDateTime lastResetDateTime) {
+        this.lastResetDateTime = lastResetDateTime;
     }
     // Getters and setters
 

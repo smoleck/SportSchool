@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +52,7 @@ public class Lesson {
             joinColumns = @JoinColumn(name = "lesson_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<Student> students = new HashSet<>();
+    private List<Student> students = new ArrayList<>();
 
     public void setGroup(boolean group) {
         isGroup = group;
@@ -65,20 +66,8 @@ public class Lesson {
         this.createdBy = createdBy;
     }
 
-    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, BigDecimal price, User createdBy, Set<Student> students) {
-        this.id = id;
-        this.name = name;
-        this.instructor = instructor;
-        this.lessonDate = lessonDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.isGroup = isGroup;
-        this.price = price;
-        this.createdBy = createdBy;
-        this.students = students;
-    }
 
-    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, BigDecimal price, Set<Student> students) {
+    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, BigDecimal price, List<Student> students) {
         this.id = id;
         this.name = name;
         this.instructor = instructor;
@@ -98,7 +87,7 @@ public class Lesson {
         this.price = price;
     }
 
-    public void setStudents(Set<Student> students) {
+    public void setStudents(List<Student> students) {
         this.students = students;
     }
 
@@ -154,7 +143,7 @@ public class Lesson {
         this.endTime = endTime;
     }
 
-    public Set<Student> getStudents() {
+    public List<Student> getStudents() {
         return students;
     }
 
@@ -168,7 +157,7 @@ public class Lesson {
         isGroup = group;
     }
 
-    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, Set<Student> students) {
+    public Lesson(Long id, String name, Instructor instructor, LocalDate lessonDate, LocalTime startTime, LocalTime endTime, boolean isGroup, List<Student> students) {
         this.id = id;
         this.name = name;
         this.instructor = instructor;

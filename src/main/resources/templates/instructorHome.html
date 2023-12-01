@@ -8,6 +8,9 @@
 <body>
 <h2>Welcome Instructor!</h2>
 <p>This is the instructor home page.</p>
+<br>
+<p>Tyle zarobiłeś: <span th:text="${earnings}+'zł'"></span></p>
+<br>
 
 <div th:if="${nextLesson != null}">
   <p>Najbliższa lekcja:</p>

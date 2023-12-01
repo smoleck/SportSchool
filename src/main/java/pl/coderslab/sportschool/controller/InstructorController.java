@@ -4,10 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pl.coderslab.sportschool.model.Instructor;
 import pl.coderslab.sportschool.model.Lesson;
+import pl.coderslab.sportschool.service.InstructorService;
 import pl.coderslab.sportschool.service.LessonService;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,18 +21,23 @@ import java.util.Optional;
 public class InstructorController {
 
     private final LessonService lessonService;
+    private final InstructorService instructorService;
 
-    public InstructorController(LessonService lessonService) {
+    public InstructorController(LessonService lessonService, InstructorService instructorService) {
         this.lessonService = lessonService;
+        this.instructorService = instructorService;
     }
 
     @GetMapping("/home")
     public String instructorHome(Model model, Principal principal) {
     String instructorUsername = principal.getName();
+    Instructor instructor=instructorService.getInstructorByUsername(instructorUsername);
     Optional<Lesson> nextLesson = lessonService.getNextLessonForInstructor(instructorUsername).stream().findFirst();
-
+    instructorService.updateEarningsForCompletedLessons(instructorUsername);
+    Long earnings=instructor.getEarnings();
 
     model.addAttribute("nextLesson", nextLesson.orElse(null));
+    model.addAttribute("earnings", earnings);
 
 
         return "instructorHome";
