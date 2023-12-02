@@ -2,28 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add to Group Form</title>
+    <title>Grupowe</title>
 </head>
 <body>
 
-<h2>Add Students to Group Lesson</h2>
+<h2>Zapisz kursanta na lekcje grupową</h2>
 
 <form th:action="@{/user/lesson/addToGroup}" method="post">
     <div>
-        <label for="lessonId">Select Group Lesson:</label>
+        <label for="lessonId">Wybierz lekcje:</label>
         <select id="lessonId" name="lessonId">
-            <option th:each="lesson : ${futureGroupLessons}" th:value="${lesson.id}" th:text="${lesson.lessonDate+'   '+lesson.startTime+'-'+lesson.endTime+'   '+lesson.instructor.name}"></option>
+            <option th:each="lesson : ${futureGroupLessons}" th:value="${lesson.id}" th:text="${lesson.name+' '+lesson.lessonDate+'   '+lesson.startTime+'-'+lesson.endTime+'   '+lesson.instructor.name}"></option>
         </select>
     </div>
 
     <div>
-        <label for="newStudentId">Select Student to Add:</label>
+        <label for="newStudentId">Wybierz kursanta:</label>
         <select id="newStudentId" name="newStudentId">
             <option th:each="student : ${students}" th:value="${student.id}" th:text="${student.name}"></option>
         </select>
     </div>
 
-    <button type="submit">Add Student to Lesson</button>
+    <button type="submit">Zapisz</button>
 </form>
 <br>
 <a th:href="@{/user/home}">Cofnij</a>

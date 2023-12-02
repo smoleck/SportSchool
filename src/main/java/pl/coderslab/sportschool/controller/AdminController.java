@@ -1,13 +1,14 @@
 package pl.coderslab.sportschool.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.sportschool.model.Instructor;
-import pl.coderslab.sportschool.model.Lesson;
 import pl.coderslab.sportschool.service.InstructorService;
-import pl.coderslab.sportschool.service.LessonServiceImpl;
+import pl.coderslab.sportschool.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -15,15 +16,22 @@ import java.util.List;
 public class AdminController {
 
     private final InstructorService instructorService;
-    private final LessonServiceImpl lessonService;
+    private final UserService userService;
 
-    public AdminController(InstructorService instructorService, LessonServiceImpl lessonService) {
+    @Autowired
+    public AdminController(InstructorService instructorService, UserService userService) {
         this.instructorService = instructorService;
-        this.lessonService = lessonService;
+        this.userService = userService;
     }
 
+
+
+
     @GetMapping("/home")
-    public String adminHome() {
+    public String adminHome(Model model, Principal principal) {
+        String username = principal.getName();
+        model.addAttribute("username", username);
+        userService.getUserByUsername(username);
         return "adminHome";
     }
 

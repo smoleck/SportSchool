@@ -11,8 +11,9 @@
 <h2>Add Lesson</h2>
 
 <form action="/user/lesson/save" method="post">
-    <!-- Wybór instruktora -->
+
     <input type="hidden" name="isGroup" value="0">
+    <input type="hidden" name="lessonName" value="individual">
 
     <div>
         <label for="instructorId">Select Instructor:</label>
@@ -23,17 +24,16 @@
         </select>
     </div>
 
-    <!-- Wybór daty -->
+
     <div>
         <label for="lessonDate">Select Lesson Date:</label>
         <input type="date" name="lessonDate" id="lessonDate" required>
     </div>
 
-    <!-- Wybór dostępności instruktora w danym dniu -->
+
     <div>
         <label for="lessonTime">Select Lesson Time:</label>
         <select name="lessonTime" id="lessonTime" required>
-            <!-- Lista będzie generowana dynamicznie w oparciu o dostępność instruktora w danym dniu -->
         </select>
     </div>
     <div>
@@ -46,7 +46,6 @@
         <label th:for="${'student_' + student.id}" th:text="${student.name + ' ' + student.surname}"></label><br />
     </div>
 
-    <!-- Dodaj miejsce na wyświetlenie liczby zaznaczonych checkboxów -->
     <p id="selectedCount" hidden>Liczba zaznaczonych: 0</p>
     <button type="submit">Add Lesson</button>
 
@@ -56,32 +55,11 @@
 <a th:href="@{/user/home}">Cofnij</a>
 
 <script th:inline="javascript">
-    $(document).ready(function() {
-        // Obsługa zmiany czasu rozpoczęcia lekcji
-        $('#lessonTime').on('change', function() {
-            // Pobierz wybrany czas rozpoczęcia
-            var startTime = $('#lessonTime').val();
 
-            // Sprawdź, czy wybrano czas rozpoczęcia
-            if (startTime) {
-                // Dodaj jedną godzinę do czasu rozpoczęcia i ustaw jako czas zakończenia
-                var endTime = new Date("1970-01-01T" + startTime);
-                endTime.setHours(endTime.getHours() + 1);
-
-                // Formatuj czas zakończenia i ustaw go jako wartość pola czasu zakończenia
-                var formattedEndTime = endTime.toTimeString().substring(0, 5);
-                $('#lessonEndTime').val(formattedEndTime);
-            } else {
-                // Jeśli czas rozpoczęcia nie jest wybrany, wyczyść pole czasu zakończenia
-                $('#lessonEndTime').val('');
-            }
-        });
-    });
     function limitCheckboxSelection(checkbox, maxLimit) {
         var selectedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
         document.getElementById('selectedCount').textContent = 'Liczba zaznaczonych: ' + selectedCount;
 
-        // Oblicz cenę w zależności od liczby zaznaczonych checkboxów
         var price;
         if (selectedCount === 1) {
             price = 100;
@@ -90,13 +68,11 @@
         } else if (selectedCount >= 3) {
             price = 250;
         } else {
-            price = 0;  // Cena dla braku zaznaczonych checkboxów
+            price = 0;
         }
 
-        // Aktualizuj wyświetlaną cenę
         document.getElementById('selectedPrice').textContent = 'Cena: ' + price + ' zł';
 
-        // Dodaj tutaj kod, jeśli chcesz coś zrobić, gdy osiągnięto limit
         if (selectedCount > maxLimit) {
             checkbox.checked = false;
             alert('Osiągnięto limit zaznaczonych checkboxów (' + maxLimit + ').');
@@ -110,7 +86,6 @@
             updateAvailability();
         });
 
-        // Obsługa zmiany instruktora
         $('#instructorId').on('change', function() {
             updateAvailability();
         });
@@ -122,12 +97,22 @@
             // Pobierz dostępność instruktora w danym dniu z kontrolera
             $.get('/user/lesson/availability', { date: selectedDate, instructorId: selectedInstructor }, function(data) {
                 console.log(data);
-                // Wypełnij rozwijaną listę z dostępnymi godzinami
+
+                // Wypełnij rozwijaną listę z dostępnymi godzinami rozpoczęcia
                 var timeDropdown = $('#lessonTime');
                 timeDropdown.empty();
                 $.each(data, function(index, value) {
                     timeDropdown.append('<option value="' + value + '">' + value + '</option>');
                 });
+
+                // Wypełnij rozwijaną listę z dostępnymi godzinami zakończenia
+                var endTimeDropdown = $('#lessonEndTime');
+                endTimeDropdown.empty();
+                $.each((data, function (index, value){
+                    endTimeDropdown.append('<option value="' + value + '">' + value + '</option>')
+                }))
+
+
             });
         }
     });

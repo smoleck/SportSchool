@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instructor Lessons</title>
+    <title>Lekcje</title>
 </head>
 <body>
-<h2>Instructor Lessons</h2>
+<h2>Twoje lekcje:</h2>
 
 <table>
     <thead>
     <tr>
-        <th>Lesson Date</th>
-        <th>Lesson Start</th>
-        <th>Lesson End</th>
-        <th>Students</th>
-        <!-- Dodaj inne kolumny według potrzeb -->
+        <th>Data</th>
+        <th>Nazwa</th>
+        <th>Start</th>
+        <th>Koniec</th>
+        <th>Kursanci</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="lesson : ${instructorLessons}">
 
+        <td th:text="${lesson.name}"></td>
         <td th:text="${lesson.lessonDate}"></td>
         <td th:text="${lesson.startTime}"></td>
         <td th:text="${lesson.endTime}"></td>

@@ -64,10 +64,11 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime, LocalTime endTime, List<Student> students, boolean isGroup, User createdBy) {
+    public void addLesson(Instructor instructor,String lessonName, LocalDate LessonDate, LocalTime startTime, LocalTime endTime, List<Student> students, boolean isGroup, User createdBy) {
         Lesson lesson = new Lesson();
         lesson.setInstructor(instructor);
         lesson.setLessonDate(LessonDate);
+        lesson.setName(lessonName);
         lesson.setStartTime(startTime);
         lesson.setEndTime(endTime);
         lesson.getStudents().addAll(students);
@@ -173,7 +174,14 @@ public class LessonServiceImpl implements LessonService {
     public List<Lesson> getFutureGroupLessons() {
         return lessonRepository.findFutureGroupLessons();
     }
-
+    @Override
+    public List<Student> getStudentsByLessonId(Long lessonId) {
+        // Tutaj implementuj logikę pobierania studentów przypisanych do lekcji o podanym lessonId
+        // Na przykład, można użyć repozytorium lekcji, aby uzyskać tę informację
+        return lessonRepository.findById(lessonId)
+                .map(Lesson::getStudents)
+                .orElse(Collections.emptyList());
+    }
 
     @Override
     public List<Lesson> getNextLessonForInstructor(String instructorName){

@@ -54,17 +54,21 @@ public class InstructorAvailabilityController {
         while (startTime.isBefore(endTime)) {
             LocalTime nextTime = startTime.plusMinutes(60);
 
-            // Dodaj dostępność do serwisu
-            availabilityService.addInstructorAvailability(
-                    selectedInstructor,
-                    availabilityDate,
-                    startTime,
-                    nextTime
-            );
+            // Sprawdź, czy dostępność już istnieje
+            if (!availabilityService.isAvailabilityExists(selectedInstructor, availabilityDate, startTime, nextTime)) {
+                // Dodaj dostępność do serwisu, tylko jeśli nie istnieje
+                availabilityService.addInstructorAvailability(
+                        selectedInstructor,
+                        availabilityDate,
+                        startTime,
+                        nextTime
+                );
+            }
 
             startTime = nextTime;
         }
 
         return "redirect:/admin/instructorAvailability/add?success";
     }
+
 }

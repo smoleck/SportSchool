@@ -8,25 +8,27 @@
 
 <form th:action="@{/admin/instructorAvailability/add}" th:object="${availability}" method="post">
   <label for="instructor">Wybierz instruktora:</label>
-  <select th:field="*{instructor}" id="instructor">
+  <select th:field="*{instructor}" id="instructor" th:required="*{instructor}">
     <option th:each="instructor : ${instructors}" th:value="${instructor.id}" th:text="${instructor.name + ' ' + instructor.surname}"></option>
-  </select>
+  </select >
   <br>
 
   <label for="availabilityDate">Data dostępności:</label>
-  <input type="date" th:field="*{availabilityDate}" id="availabilityDate">
+  <input type="date" th:field="*{availabilityDate}" id="availabilityDate" th:required="*{availabilityDate}">
   <br>
 
+
   <label for="startTime">Czas rozpoczęcia:</label>
-  <input type="time" th:field="*{startTime}" id="startTime" step="3600">
+  <input type="time" th:field="*{startTime}" id="startTime" step="3600" th:required="*{startTime}">
   <br>
 
   <label for="endTime">Czas zakończenia:</label>
-  <input type="time" th:field="*{endTime}" id="endTime" step="3600">
+  <input type="time" th:field="*{endTime}" id="endTime" step="3600" th:required="*{endTime}">
   <br>
 
   <button type="submit">Dodaj dostępność</button>
-
+  <br>
+  <a th:href="@{/admin/home}">Cofnij</a>
 </form>
 </body>
 </html>

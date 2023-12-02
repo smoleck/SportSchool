@@ -8,22 +8,33 @@ import org.springframework.web.bind.annotation.*;
 import pl.coderslab.sportschool.model.*;
 import pl.coderslab.sportschool.service.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user/lesson")
 public class LessonController {
 
+
+    private final InstructorService instructorService;
+
+    private final LessonServiceImpl lessonService;
+
+    private final InstructorAvailabilityService instructorAvailabilityService;
+
+    private final UserService userService;
+    private final StudentService studentService;
     @Autowired
-    private InstructorService instructorService;
-    @Autowired
-    private LessonServiceImpl lessonService;
-    @Autowired
-    private InstructorAvailabilityService instructorAvailabilityService;
-    @Autowired
-    private UserService userService;
+    public LessonController(InstructorService instructorService, LessonServiceImpl lessonService, InstructorAvailabilityService instructorAvailabilityService, UserService userService, StudentService studentService) {
+        this.instructorService = instructorService;
+        this.lessonService = lessonService;
+        this.instructorAvailabilityService = instructorAvailabilityService;
+        this.userService = userService;
+        this.studentService = studentService;
+    }
 
 
     @GetMapping("/add")
@@ -58,6 +69,7 @@ public class LessonController {
                              @RequestParam String lessonDate,
                              @RequestParam String lessonTime,
                              @RequestParam String endTime,
+                             @RequestParam String lessonName,
                              @RequestParam boolean isGroup,
                              @RequestParam List<Long> studentIds) {
         Instructor instructor = instructorService.getInstructorById(instructorId);
@@ -73,7 +85,7 @@ public class LessonController {
         List<Student> students = userService.getStudentsByIds(studentIds);
 
         // Dodaj lekcję z uwzględnieniem kursantów
-        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), LocalTime.parse(endTime), students, isGroup, loggedInUser);
+        lessonService.addLesson(instructor,lessonName, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), LocalTime.parse(endTime), students, isGroup, loggedInUser);
         // Usuń dostępność instruktora (jeśli to konieczne)
         instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
 
@@ -82,12 +94,17 @@ public class LessonController {
     }
 
     @GetMapping("/created")
-    public String showLessonsCreatedByLoggedInUser(Model model) {
+    public String showLessonsCreatedByLoggedInUser(Model model, Principal principal) {
 
 
         // Pobierz lekcje stworzone przez zalogowanego użytkownika
-        List<Lesson> lessons = lessonService.getLessonsCreatedByLoggedInUser();
+        List<Lesson> allLessons = lessonService.getAllLessons();
 
+
+
+        List<Lesson> lessons = allLessons.stream()
+                .filter(lesson -> lesson.getStudents().contains(userService.getStudentsCreatedByLoggedInUser()))
+                .collect(Collectors.toList());
         // Przekaż lekcje do widoku
         model.addAttribute("lessons", lessons);
 

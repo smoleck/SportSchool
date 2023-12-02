@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <!-- Inne elementy w head -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edycja lekcji</title>
 </head>
 <body>
 <!-- Treść body -->
 
-<h2>All Students for Lesson</h2>
+<h2>Edycja lekcji</h2>
 
-<h3>Lesson Information:</h3>
-<p th:text="${'Lesson ID: ' + lesson.id}"></p>
-<p th:text="${'Lesson Name: ' + lesson.name}"></p>
+<h3>Szczegóły:</h3>
+<p th:text="${'Id Lekcji: ' + lesson.id}"></p>
+<p th:text="${'Nazwa lekcji: ' + lesson.name}"></p>
 
-<h3>All Students:</h3>
+<h3>Kursanci::</h3>
 <form th:action="@{|/admin/lesson/edit/${lesson.id}/removeStudent|}" method="post">
   <ul>
     <li th:each="student : ${allStudentsForLesson}">
@@ -24,16 +26,16 @@
 <br>
 <br>
 
-<h3>Add Student to Lesson:</h3>
+<h3>Dodaj kursanta:</h3>
 <form th:action="@{|/admin/lesson/edit/${lesson.id}/addStudent|}" method="post">
   <select name="newStudentId">
     <option th:each="student : ${allStudentsNotInLesson}" th:value="${student.id}" th:text="${student.name + ' ' + student.surname}"></option>
   </select>
-  <button type="submit">Add Student</button>
+  <button type="submit">Zapisz</button>
 </form>
 
 <br>
-<a th:href="@{/admin/lesson/all}">Back to Lessons</a>
+<a th:href="@{/admin/lesson/all}">Wróć</a>
 
 </body>
 </html>

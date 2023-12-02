@@ -15,6 +15,7 @@ import pl.coderslab.sportschool.service.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -113,11 +114,12 @@ public class AdminLessonController {
     }
     @PostMapping("/save")
     public String saveLesson(@RequestParam Long instructorId,
+                             @RequestParam String lessonName,
                              @RequestParam String lessonDate,
                              @RequestParam String lessonTime,
                              @RequestParam String endTime,
                              @RequestParam boolean isGroup,
-                             @RequestParam List<Long> studentIds) {
+                             @RequestParam(required = false) List<Long> studentIds) {
         Instructor instructor = instructorService.getInstructorById(instructorId);
 
         // Pobierz zalogowanego użytkownika
@@ -125,16 +127,17 @@ public class AdminLessonController {
         String username = authentication.getName();
         User loggedInUser = userService.getUserByUsername(username);
 
-
-        // Pobierz kursantów na podstawie ich ID
-        List<Student> students = userService.getStudentsByIds(studentIds);
+        // Pobierz kursantów na podstawie ich ID, jeśli lista studentIds nie jest null
+        List<Student> students = (studentIds != null) ? userService.getStudentsByIds(studentIds) : Collections.emptyList();
 
         // Dodaj lekcję z uwzględnieniem kursantów
-        lessonService.addLesson(instructor, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), LocalTime.parse(endTime), students, isGroup, loggedInUser);
+        lessonService.addLesson(instructor,lessonName, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime), LocalTime.parse(endTime), students, isGroup, loggedInUser);
+
         // Usuń dostępność instruktora (jeśli to konieczne)
         instructorAvailabilityService.removeInstructorAvailability(instructorId, LocalDate.parse(lessonDate), LocalTime.parse(lessonTime));
 
         // Przekieruj użytkownika na stronę po zapisaniu lekcji
         return "redirect:/admin/lesson/all";
     }
+
 }

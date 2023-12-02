@@ -21,10 +21,11 @@ public interface LessonService {
 
     List<Lesson> getLessonsByDateTime(LocalDate lessonDate);
 
-    void addLesson(Instructor instructor, LocalDate LessonDate, LocalTime startTime, LocalTime endTime, List<Student> students, boolean isGroup, User user) ;
+    void addLesson(Instructor instructor,String lessonName, LocalDate LessonDate, LocalTime startTime, LocalTime endTime, List<Student> students, boolean isGroup, User user) ;
 
     List<Lesson> getLessonsCreatedByLoggedInUser();
     List<Lesson> findAllOrderedByLessonDateDesc();
+    List<Student> getStudentsByLessonId(Long lessonId);
 
     public List<Lesson> getGroupLessons();
     void updateLesson(Lesson lesson);

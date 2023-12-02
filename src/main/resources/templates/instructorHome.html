@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instructor Home</title>
+  <title>Instruktor</title>
 </head>
 <body>
-<h2>Welcome Instructor!</h2>
-<p>This is the instructor home page.</p>
+<h2><span th:text="'Cześć '+${instructorUsername}"></span></h2>
 <br>
 <p>Tyle zarobiłeś: <span th:text="${earnings}+'zł'"></span></p>
 <br>
@@ -17,19 +16,18 @@
   <p>Data: <span th:text="${nextLesson.lessonDate+' '+nextLesson.startTime}"></span></p>
   <td>
     <p>Kursanci:</p>
-  <!-- Zagnieżdżona pętla dla wyświetlenia studentów -->
   <ul>
     <li th:each="student : ${nextLesson.students}" th:text="${student.name + ' ' + student.surname}"></li>
   </ul>
   </td>
-  <!-- Dodaj inne informacje o lekcji, które chcesz wyświetlić -->
 </div>
 <div th:if="${nextLesson == null}">
   <p>Brak najbliższej lekcji.</p>
 </div>
-<br>
-<a href="/logout">Logout</a>
+
 <br>
 <a href="/instructor/lesson/all">Moje wszystkie lekcje</a>
+<br>
+<a href="/logout">Wyloguj</a>
 </body>
 </html>

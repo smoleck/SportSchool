@@ -3,36 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Lessons</title>
+    <title>Lekcje</title>
 </head>
 <body>
 
-<h2>All Lessons</h2>
+<h2>Lekcje</h2>
 
 <table>
     <thead>
     <tr>
         <th>ID</th>
-        <th>Lesson Date</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Instructor</th>
-        <th>Students</th>
-        <th><a th:href="@{/admin/lesson/add}">Add new lesson</a></th>
-
-        <!-- Dodaj inne kolumny, które chcesz wyświetlić -->
+        <th>Nazwa</th>
+        <th>Data</th>
+        <th>Start</th>
+        <th>Koniec</th>
+        <th>Instruktor</th>
+        <th>Kursanci</th>
+        <th><a th:href="@{/admin/lesson/add}">Dodaj nową lekcę</a></th>
     </tr>
     </thead>
     <tbody>
-    <!-- Iteruj przez wszystkie lekcje i wyświetl odpowiednie dane -->
     <tr th:each="lesson : ${allLessons}">
         <td th:text="${lesson.id}"></td>
+        <td th:text="${lesson.name}"></td>
         <td th:text="${lesson.lessonDate}"></td>
         <td th:text="${lesson.startTime}"></td>
         <td th:text="${lesson.endTime}"></td>
         <td th:text="${lesson.instructor.name}"></td>
         <td>
-            <!-- Zagnieżdżona pętla dla wyświetlenia studentów -->
+
             <ul>
                 <li th:each="student : ${lesson.students}" th:text="${student.name + ' ' + student.surname}"></li>
             </ul>
@@ -40,7 +39,7 @@
         <td><a th:href="@{/admin/lesson/edit/{id}(id=${lesson.id})}">Edytuj</a></td>
         <td><a th:href="@{/admin/lesson/delete/{id}(id=${lesson.id})}">Usuń</a></td>
 
-        <!-- Dodaj inne komórki, które chcesz wyświetlić -->
+
     </tr>
     </tbody>
 </table>

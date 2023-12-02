@@ -23,6 +23,12 @@ public class InstructorAvailabilityService {
         this.availabilityRepository = availabilityRepository;
     }
 
+    public boolean isAvailabilityExists(Instructor instructor, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        // Sprawdź, czy istnieje dostępność dla danego instruktora, daty i przedziału czasowego
+        // Zwróć true, jeśli istnieje, w przeciwnym razie false
+        return availabilityRepository.existsByInstructorAndAvailabilityDateAndStartTimeAndEndTime(instructor, date, startTime, endTime);
+    }
+
     public void addInstructorAvailability(Instructor instructor, LocalDate availabilityDate, LocalTime startTime, LocalTime endTime) {
         InstructorAvailability availability = new InstructorAvailability();
         availability.setInstructor(instructor);

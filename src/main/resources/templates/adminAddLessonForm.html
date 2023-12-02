@@ -1,52 +1,52 @@
-<!-- addLesson.html -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Lesson</title>
+    <title>Dodaj lekcje</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-<h2>Add Lesson</h2>
+<h2>Dodaj lekcje</h2>
 
 <form action="/admin/lesson/save" method="post">
-    <!-- Wybór instruktora -->
-
 
     <div>
-        <label for="instructorId">Select Instructor:</label>
+        <label for="instructorId">Wybierz instruktora:</label>
         <select name="instructorId" id="instructorId" required>
             <option th:each="instructor : ${instructors}"
                     th:value="${instructor.id}"
                     th:text="${instructor.name}"></option>
         </select>
     </div>
-
-    <!-- Wybór daty -->
     <div>
-        <label for="lessonDate">Select Lesson Date:</label>
+        <label for="lessonName">Nazwa lekcji:</label>
+        <input type="text" id="lessonName" name="lessonName"  required>
+    </div>
+
+    <div>
+        <label for="lessonDate">Data:</label>
         <input type="date" name="lessonDate" id="lessonDate" required>
     </div>
 
-    <!-- Wybór dostępności instruktora w danym dniu -->
+
     <div>
-        <label for="lessonTime">Select Lesson Time:</label>
+        <label for="lessonTime">Start:</label>
         <select name="lessonTime" id="lessonTime" required>
-            <!-- Lista będzie generowana dynamicznie w oparciu o dostępność instruktora w danym dniu -->
+
         </select>
     </div>
     <div>
-        <label for="lessonEndTime">Godzina zakończenia lekcji:</label>
+        <label for="lessonEndTime">Koniec:</label>
         <select name="endTime" id="lessonEndTime" required>
             <!-- Tutaj generujesz opcje dla endTime -->
         </select>
     </div>
     <div>
-        <input type="hidden" name="isGroup" th:value="${isGroup}">
-        <input type="checkbox" name="isGroup" id="isGroup">
+        <input type="checkbox" name="isGroup" id="isGroup" th:checked="${isGroup}">
         <label for="isGroup">Is group?</label>
     </div>
+
 
 
     <div th:each="student, iterStat : ${students}">
@@ -54,7 +54,9 @@
         <label th:for="${'student_' + student.id}" th:text="${student.name + ' ' + student.surname}"></label><br />
     </div>
 
-    <button type="submit">Add Lesson</button>
+    <button type="submit">Zapisz</button>
+    <br>
+    <a th:href="@{/admin/lesson/all}">Wróć</a>
 
 </form>
 
@@ -82,6 +84,7 @@
                 // Wypełnij rozwijaną listę z dostępnymi godzinami rozpoczęcia
                 var timeDropdown = $('#lessonTime');
                 timeDropdown.empty();
+                data.sort();
                 $.each(data, function(index, value) {
                     timeDropdown.append('<option value="' + value + '">' + value + '</option>');
                 });
@@ -91,7 +94,7 @@
                 endTimeDropdown.empty();
 
                 // Pobierz maksymalną godzinę dostępności
-                var maxAvailabilityHour = parseInt(data[data.length - 1].split(':')[0]);
+                var maxAvailabilityHour = Math.max(...data.map(time => parseInt(time.split(':')[0])));
 
                 // Generuj opcje dla endTime z interwałem 1 godziny
                 for (var i = 1; i <= maxAvailabilityHour + 1; i++) {
@@ -104,6 +107,3 @@
 </script>
 </body>
 </html>
-
-
-

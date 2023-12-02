@@ -38,6 +38,7 @@ public class InstructorController {
 
     model.addAttribute("nextLesson", nextLesson.orElse(null));
     model.addAttribute("earnings", earnings);
+    model.addAttribute("instructorUsername",instructorUsername);
 
 
         return "instructorHome";
