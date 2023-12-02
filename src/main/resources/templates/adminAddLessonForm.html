@@ -44,9 +44,9 @@
     </div>
     <div>
         <input type="checkbox" name="isGroup" id="isGroup" th:checked="${isGroup}">
+        <input type="hidden" name="isGroup" value="false" th:unless="${isGroup}">
         <label for="isGroup">Is group?</label>
     </div>
-
 
 
     <div th:each="student, iterStat : ${students}">
